@@ -4,7 +4,7 @@ import { promisify } from 'util'
 
 const app = express()
 const port = 8738
-const _dirname = __dirname.replace('\\dist', '')
+const _dirname = __dirname.replace(/[\\/]dist/, '')
 const statP = promisify(stat)
 
 app.use(express.static(_dirname + '/static'))
