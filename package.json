@@ -1,0 +1,33 @@
+{
+  "name": "tyman.tech",
+  "version": "1.0.0",
+  "description": "Tyman's personal website",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "yarn build && node dist/main.js",
+    "test": "yarn build && yarn eslint",
+    "build": "yarn rimraf dist && yarn tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TymanWasTaken/tyman.tech.git"
+  },
+  "author": "Tyman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TymanWasTaken/tyman.tech/issues"
+  },
+  "homepage": "https://github.com/TymanWasTaken/tyman.tech#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/node": "^14.14.21",
+    "@typescript-eslint/eslint-plugin": "^4.13.0",
+    "@typescript-eslint/parser": "^4.13.0",
+    "eslint": "^7.18.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.1.3"
+  }
+}
