@@ -5,9 +5,13 @@ import {extname} from 'path'
 import moment from 'moment'
 import formidable from 'express-formidable'
 import { RateLimiterMemory } from 'rate-limiter-flexible'
-// import bodyParser from 'body-parser'
+import session from 'express-session'
+import { v5 as uuidV5, v4 as uuidV4 } from 'uuid'
+import ejs from 'ejs'
+import glob from 'glob'
 
 const app = express()
+app.set('view engine', 'ejs')
 const port = 8738
 const _dirname = __dirname.replace(/[\\/]dist/, '')
 const stat = promisify(fs.stat)
@@ -19,9 +23,6 @@ const formParse = () => formidable({
 	uploadDir: _dirname + '/files',
 	keepExtensions: true
 })
-// const bodyParse = () => bodyParser.urlencoded({
-// 	extended: true
-// })
 const randID = () => {
 	const chars = [...'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890']
 	let str = ''
@@ -35,6 +36,21 @@ interface apiResponse {
 	reason?: string,
 	url?: string
 }
+interface allowedUsers {
+	'upload': {
+		[s: string]: string
+	},
+	'admin': {
+		[s: string]: string
+	}
+}
+const adminLocked = (req, res, next) => {
+	if (req.session['admin']) {
+		next()
+	} else {
+		res.sendStatus(403)
+	}
+}
 const handleUpload = async (req): Promise<{ res: apiResponse, code: number }> => {
 	const file = req.files.file as File
 	if (!file || !req.fields.key) {
@@ -47,8 +63,8 @@ const handleUpload = async (req): Promise<{ res: apiResponse, code: number }> =>
 			code: 422
 		}
 	}
-	const users = JSON.parse((await readFile(_dirname + '/allowed-users.json')).toString())
-	if (!users[req.fields.key]) {
+	const users: allowedUsers = JSON.parse((await readFile(_dirname + '/allowed-users.json')).toString())
+	if (!users.upload[req.fields.key]) {
 		await delFile(file.path)
 		return {
 			res: {
@@ -88,11 +104,17 @@ const rateLimiter = new RateLimiterMemory({
 	duration: 60
 })
 
+app.use(session({
+	secret: uuidV5(uuidV4(), uuidV4()),
+	genid: () => uuidV5(uuidV4(), uuidV4()),
+	resave: false,
+	saveUninitialized: false
+}))
 app.use(express.static(_dirname + '/static'))
 app.use(express.static(_dirname + '/files'))
 const rateLimit = async (req, res, next) => {
 	rateLimiter.consume(req.fields.key, 1)
-		.then((rateLimiterRes) => {
+		.then(() => {
 			next()
 		})
 		.catch((rateLimiterRes) => {
@@ -103,6 +125,8 @@ const rateLimit = async (req, res, next) => {
 				'X-RateLimit-Reset': new Date(Date.now() + rateLimiterRes.msBeforeNext)
 			})
 			res.sendStatus(429)
+			const file = req.files.file as File
+			delFile(file.path)
 		})
 }
 
@@ -110,9 +134,35 @@ app.get('/', ( req, res ) => {
 	res.sendFile(_dirname + '/static/index.html')
 })
 
-app.post('/uploadfile', formParse(), async (req, res) => {
+app.post('/uploadfile', formParse(), rateLimit, async (req, res) => {
 	const handled = await handleUpload(req)
 	res.status(handled.code).json(handled.res)
+})
+
+app.post('/login', formParse(), async (req, res) => {
+	const users: allowedUsers = JSON.parse((await readFile(_dirname + '/allowed-users.json')).toString())
+	if (users.admin[req.fields.key as string] === (req.fields.user as string)) {
+		req.session['admin'] = true
+		res.redirect(`${req.protocol}://${req.get('host')}/admin`)
+	} else {
+		req.session['admin'] = false
+		res.sendStatus(403)
+	}
+})
+
+app.get('/admin', adminLocked, async (req, res) => {
+	const files: string[] = await readDir(_dirname + '/files')
+	res.render('admin', { files })
+})
+
+app.delete('/admin/files', adminLocked, formParse(), async (req, res) => {
+	try {
+		await delFile(_dirname + '/files/' + req.fields['file'])
+		res.sendStatus(200)
+	} catch (e) {
+		res.sendStatus(500)
+		console.log(e.stack)
+	}
 })
 
 app.get('*', async (req, res) => {
