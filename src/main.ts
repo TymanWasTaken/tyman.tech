@@ -4,7 +4,7 @@ import {promisify} from 'util'
 import {extname} from 'path'
 import moment from 'moment'
 import formidable from 'express-formidable'
-import bodyParser from 'body-parser'
+// import bodyParser from 'body-parser'
 
 const app = express()
 const port = 8738
@@ -18,9 +18,9 @@ const formParse = () => formidable({
 	uploadDir: _dirname + '/files',
 	keepExtensions: true
 })
-const bodyParse = () => bodyParser.urlencoded({
-	extended: true
-})
+// const bodyParse = () => bodyParser.urlencoded({
+// 	extended: true
+// })
 const randID = () => {
 	const chars = [...'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890']
 	let str = ''
@@ -90,7 +90,6 @@ app.get('/', ( req, res ) => {
 
 app.post('/uploadfile', formParse(), async (req, res) => {
 	const handled = await handleUpload(req)
-	console.log(handled)
 	res.status(handled.code).json(handled.res)
 })
 
@@ -104,7 +103,6 @@ app.get('*', async (req, res) => {
 })
 
 const checkFiles = async () => {
-	console.log('Checking files')
 	const files: string[] = await readDir(_dirname + '/files')
 	const statFiles = await Promise.all(files.map(f => stat(_dirname + '/files/' + f)))
 	const fileObj = Object.fromEntries(files.map((_, i) => [files[i], statFiles[i]]))
@@ -117,7 +115,7 @@ const checkFiles = async () => {
 }
 // start the Express server
 app.listen(port, async () => {
-	console.log( `server started at http://localhost:${ port }` )
+	console.log(`Server started on port ${port}`)
 	await checkFiles()
-	setInterval(checkFiles, 10000)
+	setInterval(checkFiles, 60000)
 })
