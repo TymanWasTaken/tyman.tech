@@ -4,6 +4,7 @@ import {promisify} from 'util'
 import {extname} from 'path'
 import moment from 'moment'
 import formidable from 'express-formidable'
+import { RateLimiterMemory } from 'rate-limiter-flexible'
 // import bodyParser from 'body-parser'
 
 const app = express()
@@ -81,8 +82,29 @@ interface File {
 	toJSON(): Record<string, unknown>;
 }
 
+// Two requests per second allowed
+const rateLimiter = new RateLimiterMemory({
+	points: 2,
+	duration: 60
+})
+
 app.use(express.static(_dirname + '/static'))
 app.use(express.static(_dirname + '/files'))
+const rateLimit = async (req, res, next) => {
+	rateLimiter.consume(req.fields.key, 1)
+		.then((rateLimiterRes) => {
+			next()
+		})
+		.catch((rateLimiterRes) => {
+			res.set({
+				'Retry-After': rateLimiterRes.msBeforeNext / 1000,
+				'X-RateLimit-Limit': 2,
+				'X-RateLimit-Remaining': rateLimiterRes.remainingPoints,
+				'X-RateLimit-Reset': new Date(Date.now() + rateLimiterRes.msBeforeNext)
+			})
+			res.sendStatus(429)
+		})
+}
 
 app.get('/', ( req, res ) => {
 	res.sendFile(_dirname + '/static/index.html')
