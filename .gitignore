@@ -198,3 +198,4 @@ modules.xml
 
 allowed-users.json
 files/*
+.idea
