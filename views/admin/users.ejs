@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User management</title>
+</head>
+<body>
+    <label for="uploadUsers">Users with upload permission:</label>
+    <ul id="uploadUsers">
+        <% if (Object.keys(users.upload).length >= 1) { %>
+            <% for (const user of Object.keys(users.upload)) { %>
+            <% const uploads = users.upload %>
+            <li>
+                <div class="item">
+                    <%=user%>: <%=uploads[user]%>
+                </div>
+            </li>
+            <% } %>
+        <% } else { %>
+            <h1>No upload users :/</h1>
+        <% } %>
+    </ul>
+
+    <label for="adminUsers">Users with admin permission:</label>
+    <ul id="adminUsers">
+        <% if (Object.keys(users.admin).length >= 1) { %>
+            <% for (const user of Object.keys(users.admin)) { %>
+                <% const admins = users.admin %>
+                <li>
+                    <div class="item">
+                        <%=user%>: <%=admins[user]%>
+                    </div>
+                </li>
+            <% } %>
+        <% } else { %>
+            <h1>No admin users :/</h1>
+        <% } %>
+    </ul>
+</body>
+</html>

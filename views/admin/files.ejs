@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin panel</title>
+    <script>
+		async function delFile(file) {
+			const formData = new FormData()
+			formData.append('file', file)
+            let url = window.location.href.split('/')
+            url = url[0] + '//' + url[2] + '/admin/files'
+			await fetch(url, {
+				method: 'DELETE',
+				body: formData
+			})
+			location.reload()
+		}
+    </script>
+    <style>
+        .item>.hoverdiv { display: none; }
+        .item:hover>.hoverdiv { display: block; }
+        .hoverdiv {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            max-height: 300px;
+            max-width: 500px;
+        }
+        .hoverimg {
+            max-width:100%;
+            max-height:100%;
+            border-style: solid;
+            border-width: thick;
+            border-color: red;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <% if (files.length >= 1) { %>
+            <% for (const file of files) { %>
+                <li>
+                    <div class="item">
+                        <a href="/<%=file%>" target="_blank"><%= file %></a>
+                        <button class="deleteButton" onclick="delFile('<%=file%>')">Delete</button>
+                        <div class="hoverdiv">
+                            <img src="/<%=file%>"  alt="" class="hoverimg"/>
+                        </div>
+                    </div>
+                </li>
+            <% } %>
+        <% } else { %>
+            <h1>No files :/</h1>
+        <% } %>
+    </ul>
+</body>
+</html>

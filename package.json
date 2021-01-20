@@ -6,7 +6,8 @@
   "scripts": {
     "start": "yarn build && node -r source-map-support/register dist/main.js",
     "test": "yarn build && yarn eslint",
-    "build": "yarn rimraf dist && yarn tsc"
+    "build": "yarn rimraf dist && yarn tsc",
+    "format": "yarn prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/ejs": "^3.0.5",
     "@types/express": "^4.17.11",
     "@types/express-formidable": "^1.0.4",
     "@types/express-session": "^1.17.3",
