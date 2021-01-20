@@ -2,10 +2,10 @@ import express from 'express'
 import session from 'express-session'
 import {v4 as uuidV4, v5 as uuidV5} from 'uuid'
 import {
-	_dirname, allowedUsers,	delFile,
+	_dirname, allowedUsers, delFile,
 	formParse, handleUpload, readFile,
 	adminLocked, rateLimit, checkFiles,
-	exists, readDir
+	exists, readDir, stat
 } from './utilities'
 
 const app = express()
@@ -46,8 +46,21 @@ app.get('/admin', adminLocked, async (req, res) => {
 })
 
 app.get('/admin/files', adminLocked, async (req, res) => {
+	const fileNames = await readDir(_dirname + '/files')
+	const fileStatPromises = fileNames
+		.map(async (name) => {
+			return {
+				name,
+				time: (await stat(_dirname + '/files/' + name)).mtime.getTime()
+			}
+		})
+	let fileStats = await Promise.all(fileStatPromises)
+	fileStats = fileStats
+		.sort((a, b) => a.time - b.time)
+	const files = fileStats
+		.map(f => f.name)
 	await res.render('admin/files', {
-		files: await readDir(_dirname + '/files')
+		files
 	})
 })
 

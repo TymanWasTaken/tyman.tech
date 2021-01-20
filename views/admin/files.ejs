@@ -36,7 +36,10 @@
     </style>
 </head>
 <body>
-    <ul>
+    <label for="fileList">
+        List of files (higher number is newer)
+    </label>
+    <ol id="fileList">
         <% if (files.length >= 1) { %>
             <% for (const file of files) { %>
                 <li>
@@ -52,6 +55,6 @@
         <% } else { %>
             <h1>No files :/</h1>
         <% } %>
-    </ul>
+    </ol>
 </body>
 </html>
