@@ -15,18 +15,28 @@
 			})
 			location.reload()
 		}
+		function onMouseOver(id) {
+			const div = document.getElementById(id)
+            if (!div.contains(document.getElementById("img-" + id))) {
+				const img = document.createElement("img")
+				img.setAttribute("src", "/" + id)
+				img.setAttribute("id", "img-" + id)
+                img.setAttribute("class", "hoverImg")
+				div.appendChild(img)
+            }
+        }
     </script>
     <style>
-        .item>.hoverdiv { display: none; }
-        .item:hover>.hoverdiv { display: block; }
-        .hoverdiv {
+        .item>.hoverDiv { display: none; }
+        .item:hover>.hoverDiv { display: block; }
+        .hoverDiv {
             position: fixed;
             top: 0;
             right: 0;
             max-height: 300px;
             max-width: 500px;
         }
-        .hoverimg {
+        .hoverImg {
             max-width:100%;
             max-height:100%;
             border-style: solid;
@@ -43,11 +53,16 @@
         <% if (files.length >= 1) { %>
             <% for (const file of files) { %>
                 <li>
-                    <div class="item">
+                    <div
+                            class="item"
+                            onmouseover="onMouseOver('<%=file%>')"
+                    >
                         <a href="/<%=file%>" target="_blank"><%= file %></a>
                         <button class="deleteButton" onclick="delFile('<%=file%>')">Delete</button>
-                        <div class="hoverdiv">
-                            <img src="/<%=file%>"  alt="" class="hoverimg"/>
+                        <div class="hoverDiv" id="<%=file%>">
+                            <!--
+                            This has an img in it when hovered over, it is not preloaded to speed up loading
+                            -->
                         </div>
                     </div>
                 </li>
