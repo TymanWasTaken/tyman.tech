@@ -1,0 +1,42 @@
+name: Test build and lint
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  Test_build: # make sure build works properly
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.15.x'
+      - name: Install dependencies
+        run: |
+          yarn
+      - name: Test building
+        run: |
+          yarn run build
+  ESlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.15.x'
+      - name: Install dependencies
+        run: |
+          yarn
+      - name: ESlint
+        run: |
+          yarn run lint
