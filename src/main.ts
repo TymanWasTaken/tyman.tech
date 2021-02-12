@@ -20,7 +20,7 @@ app.use(session({
 }))
 app.use(express.static(_dirname + '/static'))
 app.use(express.static(_dirname + '/files'))
-app.enable('trust proxy')
+app.set('trust proxy', true)
 
 app.get('/', ( req, res ) => {
 	res.render('index')
