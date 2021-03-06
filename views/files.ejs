@@ -1,0 +1,56 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mod Files</title>
+    <link rel="stylesheet" href="modfiles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="/semver.browser.js"></script>
+    <script>
+        $("document").ready(async() => {
+            $("#searchBar").on("input", () => {
+                const search = $("#searchBar").val()
+
+                $("div#files>div").toArray().forEach(v => v.innerText.toLowerCase().includes(search) ? $(v).removeClass("hidden") : $(v).addClass("hidden"))
+            })
+            const filesReq = await fetch("api/modfiles")
+            const files = await filesReq.json()
+            if (files.success) {
+                const modsStorted = {}
+                for (const file of files.files) {
+                    if (!modsStorted[file.name]) modsStorted[file.name] = [file]
+                    else modsStorted[file.name].push(file)
+                }
+                for (const key in modsStorted) {
+                    if (modsStorted.hasOwnProperty(key)) {
+                        modsStorted[key] = modsStorted[key].sort((a, b) => semver.rcompare(a.version, b.version))
+                    }
+                }
+                for (const file of Object.values(modsStorted).sort().reduce((a, b) => [...a, ...b])) {
+                    const div = $("<div></div>")
+                    div.addClass("filesDiv")
+                    div.addClass("tooltip")
+                    div.prop("title", file.description)
+                    const a = $("<a></a>")
+                    a.attr("href", file.url)
+                    a.append(`${file.name}-${file.version}.jar${file['needs-whitelist'] ? ' (NEEDS WHITELIST)' : ''}`)
+                    div.append(a)
+                    $("#files").append(div)
+                }
+            } else {
+                alert("Error loading files")
+            }
+
+        })
+    </script>
+</head>
+
+<body>
+    <h1 id="header">Mod files</h1>
+    <input id="searchBar" type="text" placeholder="Search here">
+    <div id="files"></div>
+</body>
+
+</html>

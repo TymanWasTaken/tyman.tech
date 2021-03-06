@@ -74,7 +74,7 @@ export const rateLimitUploader = async (req: express.Request, res: express.Respo
 }
 
 export const rateLimitFiles = async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-	rateLimiterUploader.consume(req.session.id, 1)
+	rateLimiterFiles.consume(req.sessionID, 1)
 		.then(() => {
 			next()
 		})

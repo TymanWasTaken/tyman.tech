@@ -5,25 +5,44 @@ import {
 	_dirname, allowedUsers, delFile,
 	formParse, handleUpload, readFile,
 	adminLocked, rateLimitUploader, checkFiles,
-	exists, readDir, stat
+	exists, readDir, stat, rateLimitFiles
 } from './utilities'
-import { botToken } from './secrets'
+import { botToken, dev } from './config'
 import got from 'got'
 import { APIMessage } from 'discord-api-types'
+
+process.on('unhandledRejection', up => { throw up })
 
 const app = express()
 const port = 8738
 
 app.set('view engine', 'ejs')
-app.use(session({
-	secret: uuidV5(uuidV4(), uuidV4()),
-	genid: () => uuidV5(uuidV4(), uuidV4()),
-	resave: false,
-	saveUninitialized: false
-}))
+if (dev) {
+	app.set('trust proxy', false)
+	app.use(session({
+		secret: uuidV5(uuidV4(), uuidV4()),
+		genid: () => uuidV5(uuidV4(), uuidV4()),
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			secure: false,
+			httpOnly: false
+		},
+	}))
+} else {
+	app.set('trust proxy', true)
+	app.use(session({
+		secret: uuidV5(uuidV4(), uuidV4()),
+		genid: () => uuidV5(uuidV4(), uuidV4()),
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			secure: true
+		}
+	}))
+}
 app.use(express.static(_dirname + '/static'))
 app.use(express.static(_dirname + '/files'))
-app.set('trust proxy', true)
 
 app.get('/', ( req, res ) => {
 	res.render('index')
@@ -94,9 +113,9 @@ app.delete('/admin/files', adminLocked, formParse(), async (req, res) => {
 	}
 })
 
-app.get('/api/modfiles', async (req, res) => {
+app.get('/api/modfiles', rateLimitFiles, async (req, res) => {
 	try {
-		const apiRes = await got.get('https://discord.com/api/guilds/695310188764332072/channels/817563414615293973/messages?limit=100', {
+		const apiRes = await got.get('https://discord.com/api/v8/channels/817563414615293973/messages?limit=100', {
 			headers: {
 				Authorization: 'Bot ' + botToken
 			}
@@ -111,7 +130,7 @@ app.get('/api/modfiles', async (req, res) => {
 	} catch (e) {
 		res.status(500).json({
 			success: false,
-			reason: 'Discord api error: ' + await e.response.text()
+			reason: 'Discord api error: ' + (e.response !== undefined ? JSON.parse(e.response.body).message : 'unable to find')
 		})
 	}
 	
