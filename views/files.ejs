@@ -13,7 +13,7 @@
             $("#searchBar").on("input", () => {
                 const search = $("#searchBar").val()
 
-                $("div#files>div").toArray().forEach(v => v.innerText.toLowerCase().includes(search) ? $(v).removeClass("hidden") : $(v).addClass("hidden"))
+                $("div#files>div").toArray().forEach(v => v.innerText.toLowerCase().includes(search.toLowerCase()) ? $(v).removeClass("hidden") : $(v).addClass("hidden"))
             })
             const filesReq = await fetch("api/modfiles")
             const files = await filesReq.json()
