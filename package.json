@@ -26,6 +26,7 @@
     "express-formidable": "^1.2.0",
     "express-session": "^1.17.1",
     "glob": "^7.1.6",
+    "got": "^11.8.2",
     "moment": "^2.29.1",
     "rate-limiter-flexible": "^2.2.1",
     "uuid": "^8.3.2"
@@ -39,6 +40,7 @@
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.13.0",
     "@typescript-eslint/parser": "^4.13.0",
+    "discord-api-types": "^0.12.1",
     "eslint": "^7.18.0",
     "rimraf": "^3.0.2",
     "source-map-support": "^0.5.19",

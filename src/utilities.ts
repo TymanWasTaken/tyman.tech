@@ -4,7 +4,7 @@ import {promisify} from 'util'
 import * as fs from 'fs'
 import {RateLimiterMemory} from 'rate-limiter-flexible'
 import moment from 'moment'
-import express, {Express} from 'express'
+import express from 'express'
 
 export interface File {
 	size: number;
@@ -41,17 +41,22 @@ export const delFile = promisify(fs.unlink)
 export const renameFile = promisify(fs.rename)
 export const exists = promisify(fs.exists)
 
-export const formParse = () => formidable({
+export const formParse = (): express.RequestHandler => formidable({
 	uploadDir: _dirname + '/files',
 	keepExtensions: true
 })
-export const rateLimiter = new RateLimiterMemory({
+export const rateLimiterUploader = new RateLimiterMemory({
 	points: 2,
 	duration: 60
 })
 
-export const rateLimit = async (req, res, next): Promise<void> => {
-	rateLimiter.consume(req.fields.key, 1)
+export const rateLimiterFiles = new RateLimiterMemory({
+	points: 2,
+	duration: 10
+})
+
+export const rateLimitUploader = async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+	rateLimiterUploader.consume(req.fields.key as string, 1)
 		.then(() => {
 			next()
 		})
@@ -68,7 +73,25 @@ export const rateLimit = async (req, res, next): Promise<void> => {
 		})
 }
 
-export const handleUpload = async (req): Promise<{ res: apiResponse, code: number }> => {
+export const rateLimitFiles = async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+	rateLimiterUploader.consume(req.session.id, 1)
+		.then(() => {
+			next()
+		})
+		.catch((rateLimiterRes) => {
+			res.set({
+				'Retry-After': rateLimiterRes.msBeforeNext / 1000,
+				'X-RateLimit-Limit': 2,
+				'X-RateLimit-Remaining': rateLimiterRes.remainingPoints,
+				'X-RateLimit-Reset': new Date(Date.now() + rateLimiterRes.msBeforeNext)
+			})
+			res.sendStatus(429)
+			const file = req.files.file as File
+			delFile(file.path)
+		})
+}
+
+export const handleUpload = async (req: express.Request): Promise<{ res: apiResponse, code: number }> => {
 	const file = req.files.file as File
 	if (!file || !req.fields.key) {
 		await delFile(file.path)
@@ -81,7 +104,7 @@ export const handleUpload = async (req): Promise<{ res: apiResponse, code: numbe
 		}
 	}
 	const users: allowedUsers = JSON.parse((await readFile(_dirname + '/allowed-users.json')).toString())
-	if (!users.upload[req.fields.key]) {
+	if (!users.upload[req.fields.key as string]) {
 		await delFile(file.path)
 		return {
 			res: {
@@ -104,7 +127,7 @@ export const handleUpload = async (req): Promise<{ res: apiResponse, code: numbe
 	}
 }
 
-export const randID = () => {
+export const randID = (): string => {
 	const chars = [...'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890']
 	let str = ''
 	for (let i = 0;i<10;i++) {
@@ -113,7 +136,7 @@ export const randID = () => {
 	return str
 }
 
-export const adminLocked = (req, res, next) => {
+export const adminLocked = (req: express.Request, res: express.Response, next: express.NextFunction): void => {
 	if (req.session['admin']) {
 		next()
 	} else {
@@ -121,7 +144,7 @@ export const adminLocked = (req, res, next) => {
 	}
 }
 
-export const checkFiles = async () => {
+export const checkFiles = async (): Promise<void> => {
 	const files: string[] = await readDir(_dirname + '/files')
 	const statFiles = await Promise.all(files.map(f => stat(_dirname + '/files/' + f)))
 	const fileObj = Object.fromEntries(files.map((_, i) => [files[i], statFiles[i]]))

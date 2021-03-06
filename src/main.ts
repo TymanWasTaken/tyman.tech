@@ -4,9 +4,12 @@ import {v4 as uuidV4, v5 as uuidV5} from 'uuid'
 import {
 	_dirname, allowedUsers, delFile,
 	formParse, handleUpload, readFile,
-	adminLocked, rateLimit, checkFiles,
+	adminLocked, rateLimitUploader, checkFiles,
 	exists, readDir, stat
 } from './utilities'
+import { botToken } from './secrets'
+import got from 'got'
+import { APIMessage } from 'discord-api-types'
 
 const app = express()
 const port = 8738
@@ -26,7 +29,7 @@ app.get('/', ( req, res ) => {
 	res.render('index')
 })
 
-app.post('/uploadfile', formParse(), rateLimit, async (req, res) => {
+app.post('/uploadfile', formParse(), rateLimitUploader, async (req, res) => {
 	const handled = await handleUpload(req)
 	res.status(handled.code).json(handled.res)
 })
@@ -89,6 +92,29 @@ app.delete('/admin/files', adminLocked, formParse(), async (req, res) => {
 		res.sendStatus(500)
 		console.log(e.stack)
 	}
+})
+
+app.get('/api/modfiles', async (req, res) => {
+	try {
+		const apiRes = await got.get('https://discord.com/api/guilds/695310188764332072/channels/817563414615293973/messages?limit=100', {
+			headers: {
+				Authorization: 'Bot ' + botToken
+			}
+		}).json() as APIMessage[]
+		res.json({
+			success: true,
+			files: apiRes.map(m => {
+				const parsed = JSON.parse(m.content)
+				return {...parsed, url: m.attachments[0].proxy_url}
+			})
+		})
+	} catch (e) {
+		res.status(500).json({
+			success: false,
+			reason: 'Discord api error: ' + await e.response.text()
+		})
+	}
+	
 })
 
 app.get('*', async (req, res) => {

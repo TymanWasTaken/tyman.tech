@@ -199,3 +199,4 @@ modules.xml
 allowed-users.json
 files/*
 .idea
+src/secrets.ts
