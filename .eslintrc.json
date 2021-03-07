@@ -1,7 +1,8 @@
 {
     "env": {
         "es2021": true,
-        "node": true
+        "node": true,
+		"browser": true
     },
     "extends": [
         "eslint:recommended",
@@ -15,6 +16,10 @@
     "plugins": [
         "@typescript-eslint"
     ],
+	"globals": {
+		"semver": "readonly",
+		"$": "readonly"
+	},
     "rules": {
         "indent": [
             "error",

@@ -1,0 +1,10 @@
+dist
+files
+node_modules
+*eslint*
+*prettier*
+yarn.lock
+.git
+.git*
+.vscode
+.idea

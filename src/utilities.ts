@@ -1,33 +1,33 @@
 import formidable from 'express-formidable'
-import {extname} from 'path'
-import {promisify} from 'util'
+import { extname } from 'path'
+import { promisify } from 'util'
 import * as fs from 'fs'
-import {RateLimiterMemory} from 'rate-limiter-flexible'
+import { RateLimiterMemory } from 'rate-limiter-flexible'
 import moment from 'moment'
 import express from 'express'
 
 export interface File {
-	size: number;
-	path: string;
-	name: string;
-	type: string;
-	lastModifiedDate?: Date;
-	hash?: string;
+	size: number
+	path: string
+	name: string
+	type: string
+	lastModifiedDate?: Date
+	hash?: string
 
-	toJSON(): Record<string, unknown>;
+	toJSON(): Record<string, unknown>
 }
 
 export interface apiResponse {
-	success: boolean,
-	reason?: string,
+	success: boolean
+	reason?: string
 	url?: string
 }
 
 export interface allowedUsers {
-	'upload': {
+	upload: {
 		[s: string]: string
-	},
-	'admin': {
+	}
+	admin: {
 		[s: string]: string
 	}
 }
@@ -41,22 +41,28 @@ export const delFile = promisify(fs.unlink)
 export const renameFile = promisify(fs.rename)
 export const exists = promisify(fs.exists)
 
-export const formParse = (): express.RequestHandler => formidable({
-	uploadDir: _dirname + '/files',
-	keepExtensions: true
-})
+export const formParse = (): express.RequestHandler =>
+	formidable({
+		uploadDir: _dirname + '/files',
+		keepExtensions: true,
+	})
 export const rateLimiterUploader = new RateLimiterMemory({
 	points: 2,
-	duration: 60
+	duration: 60,
 })
 
 export const rateLimiterFiles = new RateLimiterMemory({
 	points: 2,
-	duration: 10
+	duration: 10,
 })
 
-export const rateLimitUploader = async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-	rateLimiterUploader.consume(req.fields.key as string, 1)
+export const rateLimitUploader = async (
+	req: express.Request,
+	res: express.Response,
+	next: express.NextFunction
+): Promise<void> => {
+	rateLimiterUploader
+		.consume(req.fields.key as string, 1)
 		.then(() => {
 			next()
 		})
@@ -65,7 +71,9 @@ export const rateLimitUploader = async (req: express.Request, res: express.Respo
 				'Retry-After': rateLimiterRes.msBeforeNext / 1000,
 				'X-RateLimit-Limit': 2,
 				'X-RateLimit-Remaining': rateLimiterRes.remainingPoints,
-				'X-RateLimit-Reset': new Date(Date.now() + rateLimiterRes.msBeforeNext)
+				'X-RateLimit-Reset': new Date(
+					Date.now() + rateLimiterRes.msBeforeNext
+				),
 			})
 			res.sendStatus(429)
 			const file = req.files.file as File
@@ -73,8 +81,13 @@ export const rateLimitUploader = async (req: express.Request, res: express.Respo
 		})
 }
 
-export const rateLimitFiles = async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-	rateLimiterFiles.consume(req.sessionID, 1)
+export const rateLimitFiles = async (
+	req: express.Request,
+	res: express.Response,
+	next: express.NextFunction
+): Promise<void> => {
+	rateLimiterFiles
+		.consume(req.sessionID, 1)
 		.then(() => {
 			next()
 		})
@@ -83,7 +96,9 @@ export const rateLimitFiles = async (req: express.Request, res: express.Response
 				'Retry-After': rateLimiterRes.msBeforeNext / 1000,
 				'X-RateLimit-Limit': 2,
 				'X-RateLimit-Remaining': rateLimiterRes.remainingPoints,
-				'X-RateLimit-Reset': new Date(Date.now() + rateLimiterRes.msBeforeNext)
+				'X-RateLimit-Reset': new Date(
+					Date.now() + rateLimiterRes.msBeforeNext
+				),
 			})
 			res.sendStatus(429)
 			const file = req.files.file as File
@@ -91,27 +106,31 @@ export const rateLimitFiles = async (req: express.Request, res: express.Response
 		})
 }
 
-export const handleUpload = async (req: express.Request): Promise<{ res: apiResponse, code: number }> => {
+export const handleUpload = async (
+	req: express.Request
+): Promise<{ res: apiResponse; code: number }> => {
 	const file = req.files.file as File
 	if (!file || !req.fields.key) {
 		await delFile(file.path)
 		return {
 			res: {
 				success: false,
-				reason:	'File or key not given'
+				reason: 'File or key not given',
 			},
-			code: 422
+			code: 422,
 		}
 	}
-	const users: allowedUsers = JSON.parse((await readFile(_dirname + '/allowed-users.json')).toString())
+	const users: allowedUsers = JSON.parse(
+		(await readFile(_dirname + '/allowed-users.json')).toString()
+	)
 	if (!users.upload[req.fields.key as string]) {
 		await delFile(file.path)
 		return {
 			res: {
 				success: false,
-				reason: 'Invalid key'
+				reason: 'Invalid key',
 			},
-			code: 403
+			code: 403,
 		}
 	}
 	const id = randID()
@@ -121,22 +140,28 @@ export const handleUpload = async (req: express.Request): Promise<{ res: apiResp
 	return {
 		res: {
 			success: true,
-			url: `${req.protocol}://${req.get('host')}/${newName}`
+			url: `${req.protocol}://${req.get('host')}/${newName}`,
 		},
-		code: 200
+		code: 200,
 	}
 }
 
 export const randID = (): string => {
-	const chars = [...'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890']
+	const chars = [
+		...'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890',
+	]
 	let str = ''
-	for (let i = 0;i<10;i++) {
+	for (let i = 0; i < 10; i++) {
 		str += chars[Math.floor(Math.random() * chars.length)]
 	}
 	return str
 }
 
-export const adminLocked = (req: express.Request, res: express.Response, next: express.NextFunction): void => {
+export const adminLocked = (
+	req: express.Request,
+	res: express.Response,
+	next: express.NextFunction
+): void => {
 	if (req.session['admin']) {
 		next()
 	} else {
@@ -146,8 +171,12 @@ export const adminLocked = (req: express.Request, res: express.Response, next: e
 
 export const checkFiles = async (): Promise<void> => {
 	const files: string[] = await readDir(_dirname + '/files')
-	const statFiles = await Promise.all(files.map(f => stat(_dirname + '/files/' + f)))
-	const fileObj = Object.fromEntries(files.map((_, i) => [files[i], statFiles[i]]))
+	const statFiles = await Promise.all(
+		files.map((f) => stat(_dirname + '/files/' + f))
+	)
+	const fileObj = Object.fromEntries(
+		files.map((_, i) => [files[i], statFiles[i]])
+	)
 	for (const file of Object.keys(fileObj)) {
 		const mtime = moment(fileObj[file].mtime)
 		if (moment.duration(mtime.diff(moment.now())).asMonths() >= 1) {

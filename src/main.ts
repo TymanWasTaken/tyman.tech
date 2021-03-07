@@ -1,17 +1,28 @@
 import express from 'express'
 import session from 'express-session'
-import {v4 as uuidV4, v5 as uuidV5} from 'uuid'
+import { v4 as uuidV4, v5 as uuidV5 } from 'uuid'
 import {
-	_dirname, allowedUsers, delFile,
-	formParse, handleUpload, readFile,
-	adminLocked, rateLimitUploader, checkFiles,
-	exists, readDir, stat, rateLimitFiles
+	_dirname,
+	allowedUsers,
+	delFile,
+	formParse,
+	handleUpload,
+	readFile,
+	adminLocked,
+	rateLimitUploader,
+	checkFiles,
+	exists,
+	readDir,
+	stat,
+	rateLimitFiles,
 } from './utilities'
 import { botToken, dev } from './config'
 import got from 'got'
 import { APIMessage } from 'discord-api-types'
 
-process.on('unhandledRejection', up => { throw up })
+process.on('unhandledRejection', (up) => {
+	throw up
+})
 
 const app = express()
 const port = 8738
@@ -19,32 +30,36 @@ const port = 8738
 app.set('view engine', 'ejs')
 if (dev) {
 	app.set('trust proxy', false)
-	app.use(session({
-		secret: uuidV5(uuidV4(), uuidV4()),
-		genid: () => uuidV5(uuidV4(), uuidV4()),
-		resave: false,
-		saveUninitialized: false,
-		cookie: {
-			secure: false,
-			httpOnly: false
-		},
-	}))
+	app.use(
+		session({
+			secret: uuidV5(uuidV4(), uuidV4()),
+			genid: () => uuidV5(uuidV4(), uuidV4()),
+			resave: false,
+			saveUninitialized: false,
+			cookie: {
+				secure: false,
+				httpOnly: false,
+			},
+		})
+	)
 } else {
 	app.set('trust proxy', true)
-	app.use(session({
-		secret: uuidV5(uuidV4(), uuidV4()),
-		genid: () => uuidV5(uuidV4(), uuidV4()),
-		resave: false,
-		saveUninitialized: false,
-		cookie: {
-			secure: true
-		}
-	}))
+	app.use(
+		session({
+			secret: uuidV5(uuidV4(), uuidV4()),
+			genid: () => uuidV5(uuidV4(), uuidV4()),
+			resave: false,
+			saveUninitialized: false,
+			cookie: {
+				secure: true,
+			},
+		})
+	)
 }
 app.use(express.static(_dirname + '/static'))
 app.use(express.static(_dirname + '/files'))
 
-app.get('/', ( req, res ) => {
+app.get('/', (req, res) => {
 	res.render('index')
 })
 
@@ -54,7 +69,9 @@ app.post('/uploadfile', formParse(), rateLimitUploader, async (req, res) => {
 })
 
 app.post('/login', formParse(), async (req, res) => {
-	const users: allowedUsers = JSON.parse((await readFile(_dirname + '/allowed-users.json')).toString())
+	const users: allowedUsers = JSON.parse(
+		(await readFile(_dirname + '/allowed-users.json')).toString()
+	)
 	if (users.admin[req.fields.key as string] === (req.fields.user as string)) {
 		req.session['admin'] = true
 		res.redirect(`${req.protocol}://${req.get('host')}/admin`)
@@ -70,27 +87,26 @@ app.get('/admin', adminLocked, async (req, res) => {
 
 app.get('/admin/files', adminLocked, async (req, res) => {
 	const fileNames = await readDir(_dirname + '/files')
-	const fileStatPromises = fileNames
-		.map(async (name) => {
-			return {
-				name,
-				time: (await stat(_dirname + '/files/' + name)).mtime.getTime()
-			}
-		})
+	const fileStatPromises = fileNames.map(async (name) => {
+		return {
+			name,
+			time: (await stat(_dirname + '/files/' + name)).mtime.getTime(),
+		}
+	})
 	let fileStats = await Promise.all(fileStatPromises)
-	fileStats = fileStats
-		.sort((a, b) => a.time - b.time)
-	const files = fileStats
-		.map(f => f.name)
+	fileStats = fileStats.sort((a, b) => a.time - b.time)
+	const files = fileStats.map((f) => f.name)
 	await res.render('admin/files', {
-		files
+		files,
 	})
 })
 
 app.get('/admin/users', adminLocked, async (req, res) => {
-	const users: allowedUsers = JSON.parse((await readFile(_dirname + '/allowed-users.json')).toString())
+	const users: allowedUsers = JSON.parse(
+		(await readFile(_dirname + '/allowed-users.json')).toString()
+	)
 	await res.render('admin/users', {
-		users
+		users,
 	})
 })
 
@@ -115,25 +131,33 @@ app.delete('/admin/files', adminLocked, formParse(), async (req, res) => {
 
 app.get('/api/modfiles', rateLimitFiles, async (req, res) => {
 	try {
-		const apiRes = await got.get('https://discord.com/api/v8/channels/817563414615293973/messages?limit=100', {
-			headers: {
-				Authorization: 'Bot ' + botToken
-			}
-		}).json() as APIMessage[]
+		const apiRes = (await got
+			.get(
+				'https://discord.com/api/v8/channels/817563414615293973/messages?limit=100',
+				{
+					headers: {
+						Authorization: 'Bot ' + botToken,
+					},
+				}
+			)
+			.json()) as APIMessage[]
 		res.json({
 			success: true,
-			files: apiRes.map(m => {
+			files: apiRes.map((m) => {
 				const parsed = JSON.parse(m.content)
-				return {...parsed, url: m.attachments[0].proxy_url}
-			})
+				return { ...parsed, url: m.attachments[0].proxy_url }
+			}),
 		})
 	} catch (e) {
 		res.status(500).json({
 			success: false,
-			reason: 'Discord api error: ' + (e.response !== undefined ? JSON.parse(e.response.body).message : 'unable to find')
+			reason:
+				'Discord api error: ' +
+				(e.response !== undefined
+					? JSON.parse(e.response.body).message
+					: 'unable to find'),
 		})
 	}
-	
 })
 
 app.get('*', async (req, res) => {
