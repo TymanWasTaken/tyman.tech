@@ -24,10 +24,10 @@ jobs:
           yarn
       - name: Test ESlint
         run: |
-          yarn run lint
+          yarn lint
       - name: Test building
         run: |
-          yarn run build
+          yarn build
       - name: Test formatting
         run: |
-          yarn prettier --check .
+          yarn check-format

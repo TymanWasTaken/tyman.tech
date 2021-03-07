@@ -5,9 +5,11 @@
 	"main": "src/main.ts",
 	"scripts": {
 		"start": "yarn build && node -r source-map-support/register dist/main.js",
-		"test": "yarn build && yarn eslint",
+		"test": "yarn build && yarn lint && yarn check-format",
 		"build": "yarn rimraf dist && yarn tsc",
-		"format": "yarn prettier --write ."
+		"lint": "yarn eslint .",
+		"format": "yarn prettier --write .",
+		"check-format": "yarn prettier --check ."
 	},
 	"repository": {
 		"type": "git",
