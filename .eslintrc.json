@@ -37,5 +37,13 @@
             "error",
             "never"
         ]
-    }
+    },
+	"ignorePatterns": [
+		"dist",
+		"files",
+		"static/*.browser.js",
+		"node_modules",
+		".vscode",
+		".idea"
+	]
 }
