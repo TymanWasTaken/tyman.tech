@@ -1,2 +1,2 @@
-export const botToken = ''
-export const dev = true
+export const botToken = '';
+export const dev = true;

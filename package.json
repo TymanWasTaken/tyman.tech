@@ -57,12 +57,15 @@
 		}
 	},
 	"prettier": {
-		"trailingComma": "es5",
+		"trailingComma": "none",
 		"tabWidth": 4,
-		"semi": false,
+		"semi": true,
 		"singleQuote": true,
 		"useTabs": true,
-		"endOfLine": "auto"
+		"endOfLine": "lf",
+		"quoteProps": "consistent",
+		"bracketSpacing": true,
+		"arrowParens": "avoid"
 	},
 	"eslintConfig": {
 		"env": {
@@ -98,7 +101,7 @@
 			],
 			"semi": [
 				"error",
-				"never"
+				"always"
 			]
 		},
 		"ignorePatterns": [
