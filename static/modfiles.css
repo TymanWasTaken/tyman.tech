@@ -1,7 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+:root {
+	--primary-color: white;
+	--text-color: black;
+	--secondary-color: #c2c2c2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--primary-color: #232323;
+		--text-color: white;
+		--secondary-color: #171717;
+	}
+}
+
 html {
-	background-color: #232323;
-	color: white;
+	background-color: var(--primary-color);
+	color: var(--text-color);
 	font-family: 'Roboto', sans-serif;
 }
 
@@ -13,7 +27,15 @@ input#searchBar {
 	margin: 0 auto;
 	display: block;
 	width: 75%;
-	height: 5%;
+	line-height: 28px;
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+	border: 1px solid #2d9fd9;
+	padding-left: 10px;
+	color: var(--text-color);
+	background-color: var(--secondary-color);
+	outline: none;
 }
 
 div#files {
@@ -25,30 +47,51 @@ div#files {
 	left: 50%;
 	-webkit-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
-	width: 50%;
+	width: 90%;
 	height: 75%;
 	overflow: auto;
+	background-color: var(--primary-color);
+	margin-top: 5px;
 }
 
-div#files > div {
-	padding-top: 5%;
-	padding-bottom: 5%;
-	padding-right: 5%;
-	padding-left: 5%;
-	display: block;
+div#files>a>div {
+	padding: 2%;
 	width: auto;
+	/* opacity: 1; */
+	height: auto;
 }
 
-div#files > div:hover {
-	background-color: rgb(32, 32, 32);
+div#files>a>div:hover {
+	background-color: var(--secondary-color);
+	text-decoration: underline;
 }
 
-div#files > div > a {
+div#files>a>div {
 	white-space: nowrap;
 	width: auto;
 	font-weight: 125%;
 }
 
+div#files>a {
+	color: inherit;
+	text-decoration: inherit;
+}
+
 .hidden {
-	display: none !important;
+	display: none;
+}
+
+*::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-color: rgba(0, 190, 248, 0.575);
+}
+
+*::-webkit-scrollbar-track {
+	border-radius: 10px;
+	background-color: rgba(255, 255, 255, 0.5);
 }

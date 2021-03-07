@@ -1,15 +1,20 @@
-$('document').ready(async () => {
-	$('#searchBar').on('input', () => {
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+$('document').ready(async() => {
+	$('#searchBar').on('input', async() => {
 		const search = $('#searchBar').val();
-		$('div#files>div')
-			.toArray()
-			.forEach(v => {
-				if (v.innerText.toLowerCase().includes(search.toLowerCase())) {
-					$(v).removeClass('hidden');
-				} else {
-					$(v).addClass('hidden');
-				}
-			});
+		const fileElements = $('div#files>div').toArray();
+		for (const e of fileElements) {
+			const $e = $(e);
+			if ($e.text().toLowerCase().includes(search.toLowerCase())) {
+				$e.removeClass('hidden');
+			} else {
+				$e.addClass('hidden');
+			}
+			await sleep(15);
+		}
 	});
 	const filesReq = await fetch('api/modfiles');
 	const files = await filesReq.json();
@@ -29,19 +34,19 @@ $('document').ready(async () => {
 		for (const file of Object.values(modsStorted)
 			.sort()
 			.reduce((a, b) => [...a, ...b])) {
-			const div = $('<div></div>');
-			div.addClass('filesDiv');
-			div.addClass('tooltip');
-			div.prop('title', file.description);
-			const a = $('<a></a>');
-			a.attr('href', file.url);
-			a.append(
+			const $div = $('<div></div>');
+			$div.addClass('filesDiv');
+			$div.addClass('tooltip');
+			$div.prop('title', file.description);
+			$div.append(
 				`${file.name}-${file.version}.jar${
 					file['needs-whitelist'] ? ' (NEEDS WHITELIST)' : ''
 				}`
 			);
-			div.append(a);
-			$('#files').append(div);
+			const $a = $('<a></a>');
+			$a.attr('href', file.url);
+			$a.append($div);
+			$('#files').append($a);
 		}
 	} else {
 		alert('Error loading files');
