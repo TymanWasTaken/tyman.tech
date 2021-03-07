@@ -9,7 +9,8 @@
 		"build": "yarn rimraf dist && yarn tsc",
 		"lint": "yarn eslint .",
 		"format": "yarn prettier --write .",
-		"check-format": "yarn prettier --check ."
+		"check-format": "yarn prettier --check .",
+		"setup": "cp src/example-config.ts src/config.ts"
 	},
 	"repository": {
 		"type": "git",
