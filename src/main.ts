@@ -145,7 +145,7 @@ app.get('/api/modfiles', rateLimitFiles, async (req, res) => {
 			success: true,
 			files: apiRes.map(m => {
 				const parsed = JSON.parse(m.content);
-				return { ...parsed, url: m.attachments[0].proxy_url };
+				return { ...parsed, url: m.attachments[0].url };
 			})
 		});
 	} catch (e) {
