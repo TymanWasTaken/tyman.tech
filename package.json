@@ -45,7 +45,7 @@
 		"@typescript-eslint/parser": "^4.13.0",
 		"discord-api-types": "^0.12.1",
 		"eslint": "^7.18.0",
-		"husky": "=4",
+		"husky": "=5",
 		"prettier": "2.2.1",
 		"rimraf": "^3.0.2",
 		"source-map-support": "^0.5.19",
