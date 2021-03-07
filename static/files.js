@@ -5,7 +5,7 @@ function sleep(ms) {
 $('document').ready(async () => {
 	$('#searchBar').on('input', async () => {
 		const search = $('#searchBar').val();
-		const fileElements = $('div#files>div').toArray();
+		const fileElements = $('div#files>a').toArray();
 		for (const e of fileElements) {
 			const $e = $(e);
 			if ($e.text().toLowerCase().includes(search.toLowerCase())) {
