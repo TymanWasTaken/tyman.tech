@@ -54,25 +54,25 @@ div#files {
 	margin-top: 5px;
 }
 
-div#files>a>div {
+div#files > a > div {
 	padding: 2%;
 	width: auto;
 	/* opacity: 1; */
 	height: auto;
 }
 
-div#files>a>div:hover {
+div#files > a > div:hover {
 	background-color: var(--secondary-color);
 	text-decoration: underline;
 }
 
-div#files>a>div {
+div#files > a > div {
 	white-space: nowrap;
 	width: auto;
 	font-weight: 125%;
 }
 
-div#files>a {
+div#files > a {
 	color: inherit;
 	text-decoration: inherit;
 }

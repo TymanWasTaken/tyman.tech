@@ -2,8 +2,8 @@ function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-$('document').ready(async() => {
-	$('#searchBar').on('input', async() => {
+$('document').ready(async () => {
+	$('#searchBar').on('input', async () => {
 		const search = $('#searchBar').val();
 		const fileElements = $('div#files>div').toArray();
 		for (const e of fileElements) {
