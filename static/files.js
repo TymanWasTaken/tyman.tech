@@ -2,10 +2,6 @@ function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function downloadFile(data) {
-	browser.downloads.download(data)
-}
-
 $('document').ready(async () => {
 	$('#searchBar').on('input', async () => {
 		const search = $('#searchBar').val();
@@ -51,8 +47,7 @@ $('document').ready(async () => {
 				}`
 			);
 			const $a = $('<a></a>');
-			$a.attr('href', 'javascript:void(0);');
-			$a.attr('onclick', `downloadFile({name:'${file.name}-${file.version}.jar',url:'${file.url}'})`);
+			$a.attr('href', file.url);
 			$a.append($div);
 			$('#files').append($a);
 		}
