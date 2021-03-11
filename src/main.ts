@@ -149,6 +149,7 @@ app.get('/api/modfiles', rateLimitFiles, async (req, res) => {
 			})
 		});
 	} catch (e) {
+		console.log('Modfiles api failed, code ' + e.response.statusCode);
 		res.status(500).json({
 			success: false,
 			reason:
