@@ -28,6 +28,7 @@ const app = express();
 const port = 8738;
 
 app.set('view engine', 'ejs');
+app.disable('x-powered-by');
 if (dev) {
 	app.set('trust proxy', false);
 	app.use(
