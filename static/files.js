@@ -3,7 +3,7 @@ function sleep(ms) {
 }
 
 function downloadFile(data) {
-	browser.downloads.download(data);
+	browser.downloads.download(data)
 }
 
 $('document').ready(async () => {
@@ -52,10 +52,7 @@ $('document').ready(async () => {
 			);
 			const $a = $('<a></a>');
 			$a.attr('href', 'javascript:void(0);');
-			$a.attr(
-				'onclick',
-				`downloadFile({name:'${file.name}-${file.version}.jar',url:'${file.url}'})`
-			);
+			$a.attr('onclick', `downloadFile({name:'${file.name}-${file.version}.jar',url:'${file.url}'})`);
 			$a.append($div);
 			$('#files').append($a);
 		}
