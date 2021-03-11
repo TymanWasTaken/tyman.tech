@@ -3,7 +3,11 @@ function sleep(ms) {
 }
 
 function downloadFile(data) {
-	browser.downloads.download(data);
+	try {
+		(browser || chrome).downloads.download(data);
+	} catch {
+		alert('Error downloading file');
+	}
 }
 
 $('document').ready(async () => {
