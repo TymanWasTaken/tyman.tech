@@ -27,7 +27,10 @@ $('document').ready(async () => {
 		for (const key in modsStorted) {
 			if (Object.prototype.hasOwnProperty.call(modsStorted, key)) {
 				modsStorted[key] = modsStorted[key].sort((a, b) =>
-					semver.rcompare(a.version, b.version)
+					semver.rcompare(
+						a.semver || a.version,
+						b.semver || b.version
+					)
 				);
 			}
 		}

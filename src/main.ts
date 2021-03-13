@@ -45,6 +45,7 @@ const app = express();
 const port = 8738;
 
 app.set('view engine', 'ejs');
+app.disable('x-powered-by');
 if (dev) {
 	app.set('trust proxy', false);
 	app.use(
@@ -168,6 +169,7 @@ app.get('/api/modfiles', rateLimitFiles, async (req, res) => {
 			})
 		});
 	} catch (e) {
+		console.log('Modfiles api failed, code ' + e.response.statusCode);
 		res.status(500).json({
 			success: false,
 			reason:
