@@ -36,7 +36,13 @@ for (const sccsFileName of scssFileNames) {
 		outputStyle: 'compressed'
 	});
 	writeFileSync(
-		join(__dirname, '..', 'static', 'css', parse(sccsFileName).name + '.css'),
+		join(
+			__dirname,
+			'..',
+			'static',
+			'css',
+			parse(sccsFileName).name + '.css'
+		),
 		rendered.css
 	);
 }
@@ -77,7 +83,7 @@ if (dev) {
 app.use(express.static(_dirname + '/static'));
 app.use(express.static(_dirname + '/files'));
 
-console.log(_dirname + "/static")
+console.log(_dirname + '/static');
 
 app.get('/', (req, res) => {
 	res.render('index');

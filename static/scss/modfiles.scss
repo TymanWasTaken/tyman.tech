@@ -1,4 +1,4 @@
-@import "default";
+@import 'default';
 
 input#searchBar {
 	margin: 0 auto;
@@ -33,14 +33,14 @@ div#files {
 	> a {
 		color: inherit;
 		text-decoration: inherit;
-	
+
 		> div {
 			padding: 2%;
 			width: auto;
 			height: auto;
 			white-space: nowrap;
 			font-weight: 125%;
-		
+
 			&:hover {
 				background-color: var(--secondary-color);
 				text-decoration: underline;

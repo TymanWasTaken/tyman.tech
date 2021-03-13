@@ -1,4 +1,4 @@
-@import "default";
+@import 'default';
 
 body > ul {
 	display: inline-block;
@@ -6,7 +6,7 @@ body > ul {
 
 a {
 	color: blue;
-	
+
 	&:visited {
 		color: blue;
 	}
