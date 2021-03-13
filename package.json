@@ -90,7 +90,7 @@
 		"ignorePatterns": [
 			"dist",
 			"files",
-			"static/js/*.browser.js",
+			"static/js/lib",
 			"node_modules",
 			".vscode",
 			".idea"
