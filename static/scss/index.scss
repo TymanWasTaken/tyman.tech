@@ -1,27 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
-:root {
-	--primary-color: white;
-	--text-color: black;
-	--secondary-color: #c2c2c2;
-}
-
-@media (prefers-color-scheme: dark) {
-	:root {
-		--primary-color: #232323;
-		--text-color: white;
-		--secondary-color: #171717;
-	}
-}
-
-html {
-	background-color: var(--primary-color);
-	color: var(--text-color);
-	font-family: 'Roboto', sans-serif;
-}
-
-body {
-	text-align: center;
-}
+@import "default";
 
 body > ul {
 	display: inline-block;
@@ -29,7 +6,8 @@ body > ul {
 
 a {
 	color: blue;
-	:visited {
+	
+	&:visited {
 		color: blue;
 	}
 }

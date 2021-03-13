@@ -1,27 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
-:root {
-	--primary-color: white;
-	--text-color: black;
-	--secondary-color: #c2c2c2;
-}
-
-@media (prefers-color-scheme: dark) {
-	:root {
-		--primary-color: #232323;
-		--text-color: white;
-		--secondary-color: #171717;
-	}
-}
-
-html {
-	background-color: var(--primary-color);
-	color: var(--text-color);
-	font-family: 'Roboto', sans-serif;
-}
-
-h1 {
-	text-align: center;
-}
+@import "default";
 
 input#searchBar {
 	margin: 0 auto;
@@ -52,29 +29,24 @@ div#files {
 	overflow: auto;
 	background-color: var(--primary-color);
 	margin-top: 5px;
-}
 
-div#files > a > div {
-	padding: 2%;
-	width: auto;
-	/* opacity: 1; */
-	height: auto;
-
-	:hover {
-		background-color: var(--secondary-color);
-		text-decoration: underline;
+	> a {
+		color: inherit;
+		text-decoration: inherit;
+	
+		> div {
+			padding: 2%;
+			width: auto;
+			height: auto;
+			white-space: nowrap;
+			font-weight: 125%;
+		
+			&:hover {
+				background-color: var(--secondary-color);
+				text-decoration: underline;
+			}
+		}
 	}
-}
-
-div#files > a > div {
-	white-space: nowrap;
-	width: auto;
-	font-weight: 125%;
-}
-
-div#files > a {
-	color: inherit;
-	text-decoration: inherit;
 }
 
 .hidden {
@@ -82,15 +54,15 @@ div#files > a {
 }
 
 * {
-	::-webkit-scrollbar {
+	&::-webkit-scrollbar {
 		width: 10px;
 		height: 10px;
 	}
-	::-webkit-scrollbar-thumb {
+	&::-webkit-scrollbar-thumb {
 		border-radius: 10px;
 		background-color: rgba(0, 190, 248, 0.575);
 	}
-	::-webkit-scrollbar-track {
+	&::-webkit-scrollbar-track {
 		border-radius: 10px;
 		background-color: rgba(255, 255, 255, 0.5);
 	}
