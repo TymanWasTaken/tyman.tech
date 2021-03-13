@@ -59,11 +59,11 @@ div#files > a > div {
 	width: auto;
 	/* opacity: 1; */
 	height: auto;
-}
 
-div#files > a > div:hover {
-	background-color: var(--secondary-color);
-	text-decoration: underline;
+	:hover {
+		background-color: var(--secondary-color);
+		text-decoration: underline;
+	}
 }
 
 div#files > a > div {
@@ -81,17 +81,17 @@ div#files > a {
 	display: none;
 }
 
-*::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
-}
-
-*::-webkit-scrollbar-thumb {
-	border-radius: 10px;
-	background-color: rgba(0, 190, 248, 0.575);
-}
-
-*::-webkit-scrollbar-track {
-	border-radius: 10px;
-	background-color: rgba(255, 255, 255, 0.5);
+* {
+	::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+	::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		background-color: rgba(0, 190, 248, 0.575);
+	}
+	::-webkit-scrollbar-track {
+		border-radius: 10px;
+		background-color: rgba(255, 255, 255, 0.5);
+	}
 }

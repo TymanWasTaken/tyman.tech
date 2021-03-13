@@ -1,6 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import { v4 as uuidV4, v5 as uuidV5 } from 'uuid';
+import sass from 'sass';
 import {
 	_dirname,
 	allowedUsers,
@@ -19,10 +20,26 @@ import {
 import { botToken, dev } from './config';
 import got from 'got';
 import { APIMessage } from 'discord-api-types';
+import { join, parse } from 'path';
+import { readdirSync, writeFileSync } from 'fs';
 
 process.on('unhandledRejection', up => {
 	throw up;
 });
+
+// Render all scss
+const scssFileNames = readdirSync(join(__dirname, '..', 'static', 'scss'));
+
+for (const sccsFileName of scssFileNames) {
+	const rendered = sass.renderSync({
+		file: join(__dirname, '..', 'static', 'scss', sccsFileName),
+		outputStyle: 'compressed'
+	});
+	writeFileSync(
+		join(__dirname, '..', 'static', 'css', parse(sccsFileName).name + '.css'),
+		rendered.css
+	);
+}
 
 const app = express();
 const port = 8738;
@@ -58,6 +75,8 @@ if (dev) {
 }
 app.use(express.static(_dirname + '/static'));
 app.use(express.static(_dirname + '/files'));
+
+console.log(_dirname + "/static")
 
 app.get('/', (req, res) => {
 	res.render('index');

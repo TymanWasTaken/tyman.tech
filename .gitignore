@@ -200,3 +200,4 @@ allowed-users.json
 files/*
 .idea
 src/config.ts
+static/css/*

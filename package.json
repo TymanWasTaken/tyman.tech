@@ -32,6 +32,7 @@
 		"got": "^11.8.2",
 		"moment": "^2.29.1",
 		"rate-limiter-flexible": "^2.2.1",
+		"sass": "^1.32.8",
 		"uuid": "^8.3.2"
 	},
 	"devDependencies": {
@@ -40,21 +41,17 @@
 		"@types/express-formidable": "^1.0.4",
 		"@types/express-session": "^1.17.3",
 		"@types/node": "^14.14.32",
+		"@types/sass": "^1.16.0",
 		"@types/uuid": "^8.3.0",
 		"@typescript-eslint/eslint-plugin": "^4.13.0",
 		"@typescript-eslint/parser": "^4.13.0",
 		"discord-api-types": "^0.12.1",
 		"eslint": "^7.18.0",
-		"husky": "=5",
+		"eslint-config-prettier": "^8.1.0",
 		"prettier": "2.2.1",
 		"rimraf": "^3.0.2",
 		"source-map-support": "^0.5.19",
 		"typescript": "^4.1.3"
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "yarn format"
-		}
 	},
 	"prettier": {
 		"trailingComma": "none",
@@ -75,7 +72,8 @@
 		},
 		"extends": [
 			"eslint:recommended",
-			"plugin:@typescript-eslint/recommended"
+			"plugin:@typescript-eslint/recommended",
+			"prettier"
 		],
 		"parser": "@typescript-eslint/parser",
 		"parserOptions": {
@@ -88,21 +86,6 @@
 		"globals": {
 			"semver": "readonly",
 			"$": "readonly"
-		},
-		"rules": {
-			"indent": [
-				"error",
-				"tab"
-			],
-			"linebreak-style": "off",
-			"quotes": [
-				"error",
-				"single"
-			],
-			"semi": [
-				"error",
-				"always"
-			]
 		},
 		"ignorePatterns": [
 			"dist",
