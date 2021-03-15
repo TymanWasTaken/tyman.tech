@@ -46,7 +46,7 @@
 		"@typescript-eslint/eslint-plugin": "^4.17.0",
 		"@typescript-eslint/parser": "^4.17.0",
 		"discord-api-types": "^0.12.1",
-		"eslint": "^7.18.0",
+		"eslint": "^7.22.0",
 		"eslint-config-prettier": "^8.1.0",
 		"prettier": "2.2.1",
 		"rimraf": "^3.0.2",
