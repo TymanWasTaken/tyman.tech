@@ -16,7 +16,7 @@ $('document').ready(async () => {
 			await sleep(15);
 		}
 	});
-	const filesReq = await fetch('api/modfiles');
+	const filesReq = await fetch('api/files/mods');
 	const files = await filesReq.json();
 	if (files.success) {
 		const modsStorted = {};

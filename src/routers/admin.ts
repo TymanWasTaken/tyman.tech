@@ -3,9 +3,7 @@ import { join } from 'path';
 import {
 	adminLocked,
 	allowedUsers,
-	delFile,
 	exists,
-	formParse,
 	readDir,
 	readFile,
 	stat,
@@ -41,16 +39,6 @@ router.get('/users', adminLocked, async (req, res) => {
 	res.render('admin/users', {
 		users: users
 	});
-});
-
-router.delete('/files', adminLocked, formParse(), async (req, res) => {
-	try {
-		await delFile(_dirname + '/files/' + req.fields['file']);
-		res.sendStatus(200);
-	} catch (e) {
-		res.sendStatus(500);
-		console.log(e.stack);
-	}
 });
 
 router.get('*', adminLocked, async (req, res) => {

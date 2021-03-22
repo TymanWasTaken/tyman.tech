@@ -10,5 +10,6 @@
 		"dist": true,
 		"files": true,
 		".idea": true
-	}
+	},
+	"typescript.tsdk": "node_modules\\typescript\\lib"
 }

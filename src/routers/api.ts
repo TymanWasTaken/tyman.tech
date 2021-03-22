@@ -2,6 +2,7 @@ import { APIMessage } from 'discord-api-types';
 import { Router } from 'express';
 import got from 'got';
 import { botToken } from '../config';
+import { adminLocked, delFile, _dirname } from '../utilities';
 
 const router = Router();
 
@@ -15,7 +16,7 @@ router.get('/docs', (req, res) => {
 	);
 });
 
-router.get('/modfiles', async (req, res) => {
+router.get('/files/mods', async (req, res) => {
 	try {
 		const apiRes = (await got
 			.get(
@@ -44,6 +45,16 @@ router.get('/modfiles', async (req, res) => {
 					? JSON.parse(e.response.body).message
 					: 'unable to find')
 		});
+	}
+});
+
+router.delete('/files/images/:filename', adminLocked, async (req, res) => {
+	try {
+		await delFile(_dirname + '/files/' + req.params.filename);
+		res.sendStatus(200);
+	} catch (e) {
+		res.sendStatus(500);
+		console.log(e.stack);
 	}
 });
 

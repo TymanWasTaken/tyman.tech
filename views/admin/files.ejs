@@ -5,13 +5,10 @@
     <title>Admin panel</title>
     <script>
 		async function delFile(file) {
-			const formData = new FormData()
-			formData.append('file', file)
             let url = window.location.href.split('/')
-            url = url[0] + '//' + url[2] + '/admin/files'
+            url = url[0] + '//' + url[2] + '/api/files/images/' + file
 			await fetch(url, {
-				method: 'DELETE',
-				body: formData
+				method: 'DELETE'
 			})
 			location.reload()
 		}
