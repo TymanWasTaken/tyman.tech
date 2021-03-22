@@ -80,7 +80,7 @@ app.use('/', routers.IndexRouter);
 app.use('/api', routers.APIRouter);
 app.use('/admin', routers.AdminRouter);
 
-// Handle 404 last
+// Handle static views or 404 last
 app.get('*', async (req, res) => {
 	const path: string = req.path.replace(/^\//, '');
 	if (await exists(app.get('views') + '/' + path + '.ejs')) {
