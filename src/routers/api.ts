@@ -6,7 +6,13 @@ import { botToken } from '../config';
 const router = Router();
 
 router.get('/', (req, res) => {
-	res.send('API Docs soon™');
+	res.render('api/index');
+});
+
+router.get('/docs', (req, res) => {
+	res.redirect(
+		'https://app.swaggerhub.com/apis-docs/TymanWasTaken/tyman-tech-api'
+	);
 });
 
 router.get('/modfiles', async (req, res) => {
