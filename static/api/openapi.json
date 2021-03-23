@@ -3,7 +3,7 @@
 	"info": {
 		"title": "Tyman.tech API",
 		"description": "The api for the tyman.tech website",
-		"version": "1.0.1"
+		"version": "1.0.2"
 	},
 	"servers": [
 		{
