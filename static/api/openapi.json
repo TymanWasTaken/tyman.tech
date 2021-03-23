@@ -29,6 +29,7 @@
 		"/files/mods": {
 			"get": {
 				"tags": ["Mods"],
+				"summary": "Get mods",
 				"description": "Gets all the availible mod files",
 				"responses": {
 					"200": {
@@ -56,6 +57,7 @@
 		},
 		"/files/images": {
 			"get": {
+				"summary": "Get imgages",
 				"description": "Get a list of images that have been uplaoded",
 				"responses": {
 					"200": {
@@ -78,6 +80,7 @@
 			},
 			"post": {
 				"tags": ["Images"],
+				"summary": "Upload image",
 				"description": "Upload an image to the site",
 				"requestBody": {
 					"content": {
@@ -128,6 +131,7 @@
 		"/files/images/{file}": {
 			"delete": {
 				"tags": ["Images"],
+				"summary": "Delete image",
 				"description": "Delete an image file",
 				"parameters": [
 					{
