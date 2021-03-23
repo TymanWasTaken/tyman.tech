@@ -93,7 +93,7 @@ router.get('/files/images', apiKeyLocked('admin'), async (req, res) => {
 	res.status(200).json({
 		success: true,
 		files
-	})
+	});
 });
 
 router.post(

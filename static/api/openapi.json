@@ -75,7 +75,7 @@
 		},
 		"/files/images": {
 			"get": {
-				"description":"Get a list of images that have been uplaoded",
+				"description": "Get a list of images that have been uplaoded",
 				"responses": {
 					"200": {
 						"description": "Success",
@@ -90,7 +90,7 @@
 				},
 				"security": [
 					{
-						"APIKey": []		
+						"APIKey": []
 					}
 				],
 				"tags": ["Files"]
