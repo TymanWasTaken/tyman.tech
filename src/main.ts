@@ -19,7 +19,7 @@ const scssFileNames = readdirSync(join(__dirname, '..', 'static', 'scss'));
 for (const sccsFileName of scssFileNames) {
 	const rendered = sass.renderSync({
 		file: join(__dirname, '..', 'static', 'scss', sccsFileName),
-		outputStyle: 'compressed'
+		outputStyle: dev ? 'expanded' : 'compressed'
 	});
 	writeFileSync(
 		join(
