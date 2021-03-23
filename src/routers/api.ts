@@ -2,7 +2,14 @@ import { APIMessage } from 'discord-api-types';
 import { Router } from 'express';
 import got from 'got';
 import { botToken } from '../config';
-import { adminLocked, delFile, _dirname } from '../utilities';
+import {
+	adminLocked,
+	delFile,
+	formParse,
+	_dirname,
+	rateLimitUploader,
+	handleUpload
+} from '../utilities';
 
 const router = Router();
 
@@ -57,5 +64,15 @@ router.delete('/files/images/:filename', adminLocked, async (req, res) => {
 		console.log(e.stack);
 	}
 });
+
+router.post(
+	'/files/images',
+	formParse(),
+	rateLimitUploader,
+	async (req, res) => {
+		const handled = await handleUpload(req);
+		res.status(handled.code).json(handled.res);
+	}
+);
 
 export const APIRouter = router;

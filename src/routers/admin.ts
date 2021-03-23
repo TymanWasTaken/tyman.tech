@@ -4,6 +4,7 @@ import {
 	adminLocked,
 	allowedUsers,
 	exists,
+	formParse,
 	readDir,
 	readFile,
 	stat,
@@ -39,6 +40,23 @@ router.get('/users', adminLocked, async (req, res) => {
 	res.render('admin/users', {
 		users: users
 	});
+});
+
+router.get('/login', (req, res) => {
+	res.render('admin/login');
+});
+
+router.post('/login', formParse(), async (req, res) => {
+	const users: allowedUsers = JSON.parse(
+		(await readFile(_dirname + '/allowed-users.json')).toString()
+	);
+	if (users.admin[req.fields.key as string] === (req.fields.user as string)) {
+		req.session['admin'] = true;
+		res.redirect(`${req.protocol}://${req.get('host')}/admin`);
+	} else {
+		req.session['admin'] = false;
+		res.sendStatus(403);
+	}
 });
 
 router.get('*', adminLocked, async (req, res) => {
