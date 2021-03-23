@@ -51,6 +51,16 @@
 								}
 							}
 						}
+					},
+					"502": {
+						"description": "Bad Gateway",
+						"content": {
+							"text/plain; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/Bad Gateway"
+								}
+							}
+						}
 					}
 				}
 			}
@@ -73,9 +83,19 @@
 					"403": {
 						"description": "Unauthorized",
 						"content": {
-							"text/plain; charset=utf-8": {
+							"application/json; charset=utf-8": {
 								"schema": {
 									"$ref": "#/components/schemas/Unauthorized"
+								}
+							}
+						}
+					},
+					"502": {
+						"description": "Bad Gateway",
+						"content": {
+							"text/plain; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/Bad Gateway"
 								}
 							}
 						}
@@ -122,9 +142,19 @@
 					"403": {
 						"description": "Unauthorized",
 						"content": {
-							"text/plain; charset=utf-8": {
+							"application/json; charset=utf-8": {
 								"schema": {
 									"$ref": "#/components/schemas/Unauthorized"
+								}
+							}
+						}
+					},
+					"502": {
+						"description": "Bad Gateway",
+						"content": {
+							"text/plain; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/Bad Gateway"
 								}
 							}
 						}
@@ -162,9 +192,19 @@
 					"403": {
 						"description": "Unauthorized",
 						"content": {
-							"text/plain; charset=utf-8": {
+							"application/json; charset=utf-8": {
 								"schema": {
 									"$ref": "#/components/schemas/Unauthorized"
+								}
+							}
+						}
+					},
+					"502": {
+						"description": "Bad Gateway",
+						"content": {
+							"text/plain; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/Bad Gateway"
 								}
 							}
 						}
@@ -241,6 +281,7 @@
 			},
 			"Error": {
 				"type": "object",
+				"description": "Internal Server Error",
 				"properties": {
 					"success": {
 						"type": "boolean",
@@ -256,6 +297,7 @@
 			},
 			"Unauthorized": {
 				"type": "object",
+				"description": "Unauthorized",
 				"properties": {
 					"success": {
 						"type": "boolean",
@@ -268,6 +310,11 @@
 						"example": "Invalid key"
 					}
 				}
+			},
+			"Bad Gateway": {
+				"type": "string",
+				"description": "Bad Gateway",
+				"example": "<insert cloudflare html page here>"
 			},
 			"Images List": {
 				"type": "object",
