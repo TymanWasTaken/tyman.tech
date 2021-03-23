@@ -1,0 +1,210 @@
+{
+	"openapi": "3.0.1",
+	"info": {
+		"title": "Tyman.tech API",
+		"description": "The api for the tyman.tech website",
+		"version": "1.0.1"
+	},
+	"servers": [
+		{
+			"url": "https://tyman.tech/api"
+		},
+		{
+			"url": "http://localhost:8738/api"
+		}
+	],
+	"paths": {
+		"/files/mods": {
+			"get": {
+				"tags": ["Files"],
+				"description": "Gets all the availible mod files",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/Modfiles"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/files/images/{file}": {
+			"delete": {
+				"tags": ["Files"],
+				"description": "Delete an image file",
+				"parameters": [
+					{
+						"name": "file",
+						"in": "path",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string",
+							"description": "The filename of the file to delete"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success"
+					}
+				},
+				"security": [
+					{
+						"APIKey": []
+					}
+				]
+			}
+		},
+		"/files/images": {
+			"post": {
+				"tags": ["Files"],
+				"description": "Upload an image to the site",
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"file": {
+										"type": "string",
+										"format": "binary"
+									}
+								}
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/FileUpload"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Unauthorized",
+						"content": {
+							"text/plain; charset=utf-8": {
+								"schema": {
+									"type": "string",
+									"example": "Forbidden"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"APIKey": []
+					}
+				]
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"FileUpload": {
+				"type": "object",
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"description": "Whether or not the request succeeded or not",
+						"example": true
+					},
+					"url": {
+						"type": "string",
+						"description": "The url of the uploaded image",
+						"example": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+					}
+				}
+			},
+			"Modfiles": {
+				"type": "object",
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"description": "Whether or not the request succeeded or not",
+						"example": true
+					},
+					"files": {
+						"type": "array",
+						"description": "The array of file objects",
+						"items": {
+							"type": "object",
+							"properties": {
+								"name": {
+									"type": "string",
+									"description": "The name of the mod",
+									"example": "Example Mod"
+								},
+								"version": {
+									"type": "string",
+									"description": "The version of the mod",
+									"example": "1.6.9"
+								},
+								"description": {
+									"type": "string",
+									"description": "The description of the mod",
+									"example": "An example mod"
+								},
+								"needs-whitelist": {
+									"type": "boolean",
+									"description": "Whether or not this mod needs the user to be whitelisted to be used",
+									"example": false
+								},
+								"url": {
+									"type": "string",
+									"description": "The url containing the file",
+									"example": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+								}
+							}
+						}
+					}
+				}
+			},
+			"Error": {
+				"type": "object",
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"description": "Whether or not the request succeeded or not",
+						"example": false
+					},
+					"reason": {
+						"type": "string",
+						"description": "The reason of failure",
+						"example": "Internal Server Error"
+					}
+				}
+			}
+		},
+		"securitySchemes": {
+			"APIKey": {
+				"type": "apiKey",
+				"name": "Authorization",
+				"in": "header"
+			}
+		}
+	}
+}

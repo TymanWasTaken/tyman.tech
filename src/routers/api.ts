@@ -10,6 +10,15 @@ import {
 	handleUpload,
 	apiKeyLocked
 } from '../utilities';
+import swaggerUI from 'swagger-ui-express';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+const apiSpec = JSON.parse(
+	readFileSync(
+		join(__dirname, '..', '..', 'static', 'api', 'openapi.json')
+	).toString()
+);
 
 const router = Router();
 
@@ -17,11 +26,9 @@ router.get('/', (req, res) => {
 	res.render('api/index');
 });
 
-router.get('/docs', (req, res) => {
-	res.redirect(
-		'https://app.swaggerhub.com/apis-docs/TymanWasTaken/tyman-tech-api'
-	);
-});
+router.use('/docs', swaggerUI.serve);
+
+router.get('/docs', swaggerUI.setup(apiSpec));
 
 router.get('/files/mods', async (req, res) => {
 	try {
@@ -43,14 +50,15 @@ router.get('/files/mods', async (req, res) => {
 			})
 		});
 	} catch (e) {
-		console.log('Modfiles api failed, code ' + e.response.statusCode);
+		console.error(e);
 		res.status(500).json({
 			success: false,
-			reason:
-				'Discord api error: ' +
-				(e.response !== undefined
-					? JSON.parse(e.response.body).message
-					: 'unable to find')
+			reason: e.reponse
+				? 'Discord api error: ' +
+				  (e.response !== undefined
+						? JSON.parse(e.response.body).message
+						: 'unable to find')
+				: 'Internal Server Error'
 		});
 	}
 });

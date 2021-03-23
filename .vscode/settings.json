@@ -11,5 +11,13 @@
 		"files": true,
 		".idea": true
 	},
-	"typescript.tsdk": "node_modules\\typescript\\lib"
+	"typescript.tsdk": "node_modules\\typescript\\lib",
+	"json.schemas": [
+		{
+			"fileMatch": [
+				"/static/api/openapi.json"
+			],
+			"url": "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/schemas/v3.0/schema.json"
+		}
+	]
 }

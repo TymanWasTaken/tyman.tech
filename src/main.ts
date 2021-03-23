@@ -7,6 +7,7 @@ import { dev } from './config';
 import { join, parse } from 'path';
 import { readdirSync, writeFileSync } from 'fs';
 import * as routers from './routers';
+import cors from 'cors';
 
 process.on('unhandledRejection', up => {
 	throw up;
@@ -70,6 +71,9 @@ if (dev) {
 		})
 	);
 }
+
+// Set up CORS
+app.use(cors());
 
 // Static dirs
 app.use(express.static(_dirname + '/static'));
