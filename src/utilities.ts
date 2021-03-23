@@ -156,22 +156,24 @@ export const adminLocked = (
 	}
 };
 
-export const uploadKeyLocked = async (
-	req: express.Request,
-	res: express.Response,
-	next: express.NextFunction
-): Promise<void> => {
-	const users: allowedUsers = JSON.parse(
-		(await readFile(_dirname + '/allowed-users.json')).toString()
-	);
-	if (!users.upload[req.headers.authorization]) {
-		res.sendStatus(403).json({
-			success: false,
-			reason: 'Invalid key'
-		});
-	} else {
-		next();
-	}
+export const apiKeyLocked = (type: 'upload' | 'admin') => {
+	return async (
+		req: express.Request,
+		res: express.Response,
+		next: express.NextFunction
+	): Promise<void> => {
+		const users: allowedUsers = JSON.parse(
+			(await readFile(_dirname + '/allowed-users.json')).toString()
+		);
+		if (!users[type][req.headers.authorization]) {
+			res.sendStatus(403).json({
+				success: false,
+				reason: 'Invalid key'
+			});
+		} else {
+			next();
+		}
+	};
 };
 
 export const checkFiles = async (): Promise<void> => {

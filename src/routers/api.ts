@@ -3,13 +3,12 @@ import { Router } from 'express';
 import got from 'got';
 import { botToken } from '../config';
 import {
-	adminLocked,
 	delFile,
 	formParse,
 	_dirname,
 	rateLimitUploader,
 	handleUpload,
-	uploadKeyLocked
+	apiKeyLocked
 } from '../utilities';
 
 const router = Router();
@@ -56,19 +55,23 @@ router.get('/files/mods', async (req, res) => {
 	}
 });
 
-router.delete('/files/images/:filename', adminLocked, async (req, res) => {
-	try {
-		await delFile(_dirname + '/files/' + req.params.filename);
-		res.sendStatus(200);
-	} catch (e) {
-		res.sendStatus(500);
-		console.log(e.stack);
+router.delete(
+	'/files/images/:filename',
+	apiKeyLocked('admin'),
+	async (req, res) => {
+		try {
+			await delFile(_dirname + '/files/' + req.params.filename);
+			res.sendStatus(200);
+		} catch (e) {
+			res.sendStatus(500);
+			console.log(e.stack);
+		}
 	}
-});
+);
 
 router.post(
 	'/files/images',
-	uploadKeyLocked,
+	apiKeyLocked('upload'),
 	formParse(),
 	rateLimitUploader,
 	async (req, res) => {
