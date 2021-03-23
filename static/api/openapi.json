@@ -7,10 +7,12 @@
 	},
 	"servers": [
 		{
-			"url": "https://tyman.tech/api"
+			"url": "https://tyman.tech/api",
+			"description": "Main server"
 		},
 		{
-			"url": "http://localhost:8738/api"
+			"url": "http://localhost:8738/api",
+			"description": "Local dev server"
 		}
 	],
 	"paths": {
