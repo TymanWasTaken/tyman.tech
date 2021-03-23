@@ -69,6 +69,16 @@
 								}
 							}
 						}
+					},
+					"403": {
+						"description": "Unauthorized",
+						"content": {
+							"text/plain; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/Unauthorized"
+								}
+							}
+						}
 					}
 				},
 				"security": [
@@ -114,8 +124,7 @@
 						"content": {
 							"text/plain; charset=utf-8": {
 								"schema": {
-									"type": "string",
-									"example": "Forbidden"
+									"$ref": "#/components/schemas/Unauthorized"
 								}
 							}
 						}
@@ -149,6 +158,16 @@
 				"responses": {
 					"200": {
 						"description": "Success"
+					},
+					"403": {
+						"description": "Unauthorized",
+						"content": {
+							"text/plain; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/Unauthorized"
+								}
+							}
+						}
 					}
 				},
 				"security": [
@@ -232,6 +251,21 @@
 						"type": "string",
 						"description": "The reason of failure",
 						"example": "Internal Server Error"
+					}
+				}
+			},
+			"Unauthorized": {
+				"type": "object",
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"description": "Whether or not the request succeeded or not",
+						"example": false
+					},
+					"reason": {
+						"type": "string",
+						"description": "The reason of failure",
+						"example": "Invalid key"
 					}
 				}
 			},
