@@ -110,27 +110,14 @@ export const handleUpload = async (
 	req: express.Request
 ): Promise<{ res: apiResponse; code: number }> => {
 	const file = req.files.file as File;
-	if (!file || !req.fields.key) {
+	if (!file) {
 		await delFile(file.path);
 		return {
 			res: {
 				success: false,
-				reason: 'File or key not given'
+				reason: 'File not given'
 			},
 			code: 422
-		};
-	}
-	const users: allowedUsers = JSON.parse(
-		(await readFile(_dirname + '/allowed-users.json')).toString()
-	);
-	if (!users.upload[req.fields.key as string]) {
-		await delFile(file.path);
-		return {
-			res: {
-				success: false,
-				reason: 'Invalid key'
-			},
-			code: 403
 		};
 	}
 	const id = randID();
@@ -166,6 +153,24 @@ export const adminLocked = (
 		next();
 	} else {
 		res.sendStatus(403);
+	}
+};
+
+export const uploadKeyLocked = async (
+	req: express.Request,
+	res: express.Response,
+	next: express.NextFunction
+): Promise<void> => {
+	const users: allowedUsers = JSON.parse(
+		(await readFile(_dirname + '/allowed-users.json')).toString()
+	);
+	if (!users.upload[req.headers.authorization]) {
+		res.sendStatus(403).json({
+			success: false,
+			reason: 'Invalid key'
+		});
+	} else {
+		next();
 	}
 };
 

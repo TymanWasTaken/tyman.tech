@@ -8,7 +8,8 @@ import {
 	formParse,
 	_dirname,
 	rateLimitUploader,
-	handleUpload
+	handleUpload,
+	uploadKeyLocked
 } from '../utilities';
 
 const router = Router();
@@ -67,6 +68,7 @@ router.delete('/files/images/:filename', adminLocked, async (req, res) => {
 
 router.post(
 	'/files/images',
+	uploadKeyLocked,
 	formParse(),
 	rateLimitUploader,
 	async (req, res) => {
