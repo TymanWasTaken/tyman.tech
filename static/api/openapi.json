@@ -26,7 +26,7 @@
 						"content": {
 							"application/json; charset=utf-8": {
 								"schema": {
-									"$ref": "#/components/schemas/Modfiles"
+									"$ref": "#/components/schemas/Mod Files"
 								}
 							}
 						}
@@ -74,6 +74,27 @@
 			}
 		},
 		"/files/images": {
+			"get": {
+				"description":"Get a list of images that have been uplaoded",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/Images List"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"APIKey": []		
+					}
+				],
+				"tags": ["Files"]
+			},
 			"post": {
 				"tags": ["Files"],
 				"description": "Upload an image to the site",
@@ -99,7 +120,7 @@
 						"content": {
 							"application/json; charset=utf-8": {
 								"schema": {
-									"$ref": "#/components/schemas/FileUpload"
+									"$ref": "#/components/schemas/File Upload"
 								}
 							}
 						}
@@ -126,7 +147,7 @@
 	},
 	"components": {
 		"schemas": {
-			"FileUpload": {
+			"File Upload": {
 				"type": "object",
 				"properties": {
 					"success": {
@@ -141,7 +162,7 @@
 					}
 				}
 			},
-			"Modfiles": {
+			"Mod Files": {
 				"type": "object",
 				"properties": {
 					"success": {
@@ -197,6 +218,25 @@
 						"type": "string",
 						"description": "The reason of failure",
 						"example": "Internal Server Error"
+					}
+				}
+			},
+			"Images List": {
+				"type": "object",
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"description": "Whether or not the request succeeded or not",
+						"example": true
+					},
+					"files": {
+						"type": "array",
+						"description": "The file list",
+						"items": {
+							"type": "string",
+							"description": "The name of the file",
+							"example": "Vl6ea8rHHB.png"
+						}
 					}
 				}
 			}

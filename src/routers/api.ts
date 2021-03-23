@@ -8,7 +8,9 @@ import {
 	_dirname,
 	rateLimitUploader,
 	handleUpload,
-	apiKeyLocked
+	apiKeyLocked,
+	readDir,
+	stat
 } from '../utilities';
 import swaggerUI from 'swagger-ui-express';
 import { readFileSync } from 'fs';
@@ -76,6 +78,23 @@ router.delete(
 		}
 	}
 );
+
+router.get('/files/images', apiKeyLocked('admin'), async (req, res) => {
+	const fileNames = await readDir(_dirname + '/files');
+	const fileStatPromises = fileNames.map(async name => {
+		return {
+			name,
+			time: (await stat(_dirname + '/files/' + name)).mtime.getTime()
+		};
+	});
+	let fileStats = await Promise.all(fileStatPromises);
+	fileStats = fileStats.sort((a, b) => a.time - b.time);
+	const files = fileStats.map(f => f.name);
+	res.status(200).json({
+		success: true,
+		files
+	})
+});
 
 router.post(
 	'/files/images',
