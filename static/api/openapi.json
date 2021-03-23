@@ -103,7 +103,7 @@
 				},
 				"security": [
 					{
-						"APIKey": []
+						"API Key": []
 					}
 				],
 				"tags": ["Images"]
@@ -162,7 +162,7 @@
 				},
 				"security": [
 					{
-						"APIKey": []
+						"API Key": []
 					}
 				]
 			}
@@ -212,7 +212,7 @@
 				},
 				"security": [
 					{
-						"APIKey": []
+						"API Key": []
 					}
 				]
 			}
@@ -369,7 +369,7 @@
 			}
 		},
 		"securitySchemes": {
-			"APIKey": {
+			"API Key": {
 				"type": "apiKey",
 				"name": "Authorization",
 				"in": "header"
