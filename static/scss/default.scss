@@ -39,14 +39,15 @@ body {
 		font-size: 17px;
 		color: var(--text-color);
 
+		&:visited {
+			color: var(--text-color);
+		}
+
 		&.item {
 			float: right;
 
 			&:hover {
 				background-color: var(--navbar-hover-color);
-			}
-			&:visited {
-				color: var(--text-color);
 			}
 		}
 
