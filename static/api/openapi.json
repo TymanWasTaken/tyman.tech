@@ -15,10 +15,20 @@
 			"description": "Local dev server"
 		}
 	],
+	"tags": [
+		{
+			"name": "Images",
+			"description": "API Endpoints for images"
+		},
+		{
+			"name": "Mods",
+			"description": "API Endpoints for minecraft mods"
+		}
+	],
 	"paths": {
 		"/files/mods": {
 			"get": {
-				"tags": ["Files"],
+				"tags": ["Mods"],
 				"description": "Gets all the availible mod files",
 				"responses": {
 					"200": {
@@ -44,35 +54,6 @@
 				}
 			}
 		},
-		"/files/images/{file}": {
-			"delete": {
-				"tags": ["Files"],
-				"description": "Delete an image file",
-				"parameters": [
-					{
-						"name": "file",
-						"in": "path",
-						"required": true,
-						"style": "simple",
-						"explode": false,
-						"schema": {
-							"type": "string",
-							"description": "The filename of the file to delete"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Success"
-					}
-				},
-				"security": [
-					{
-						"APIKey": []
-					}
-				]
-			}
-		},
 		"/files/images": {
 			"get": {
 				"description": "Get a list of images that have been uplaoded",
@@ -93,10 +74,10 @@
 						"APIKey": []
 					}
 				],
-				"tags": ["Files"]
+				"tags": ["Images"]
 			},
 			"post": {
-				"tags": ["Files"],
+				"tags": ["Images"],
 				"description": "Upload an image to the site",
 				"requestBody": {
 					"content": {
@@ -135,6 +116,35 @@
 								}
 							}
 						}
+					}
+				},
+				"security": [
+					{
+						"APIKey": []
+					}
+				]
+			}
+		},
+		"/files/images/{file}": {
+			"delete": {
+				"tags": ["Images"],
+				"description": "Delete an image file",
+				"parameters": [
+					{
+						"name": "file",
+						"in": "path",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string",
+							"description": "The filename of the file to delete"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success"
 					}
 				},
 				"security": [
