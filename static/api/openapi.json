@@ -222,6 +222,10 @@
 		"schemas": {
 			"File Upload": {
 				"type": "object",
+				"required": [
+					"success",
+					"url"
+				],
 				"properties": {
 					"success": {
 						"type": "boolean",
@@ -237,6 +241,10 @@
 			},
 			"Mod Files": {
 				"type": "object",
+				"required": [
+					"success",
+					"files"
+				],
 				"properties": {
 					"success": {
 						"type": "boolean",
@@ -248,6 +256,13 @@
 						"description": "The array of file objects",
 						"items": {
 							"type": "object",
+							"required": [
+								"name",
+								"version",
+								"description",
+								"needs-whitelist",
+								"url"
+							],
 							"properties": {
 								"name": {
 									"type": "string",
@@ -257,6 +272,11 @@
 								"version": {
 									"type": "string",
 									"description": "The version of the mod",
+									"example": "1.6.9"
+								},
+								"semver": {
+									"type": "string",
+									"description": "The semver-compatable version of the mod (only if the `version` property itself is not semver-compatible)",
 									"example": "1.6.9"
 								},
 								"description": {
@@ -281,6 +301,10 @@
 			},
 			"Error": {
 				"type": "object",
+				"required": [
+					"success",
+					"reason"
+				],
 				"description": "Internal Server Error",
 				"properties": {
 					"success": {
@@ -298,6 +322,10 @@
 			"Unauthorized": {
 				"type": "object",
 				"description": "Unauthorized",
+				"required": [
+					"success",
+					"reason"
+				],
 				"properties": {
 					"success": {
 						"type": "boolean",
@@ -318,6 +346,10 @@
 			},
 			"Images List": {
 				"type": "object",
+				"required": [
+					"success",
+					"files"
+				],
 				"properties": {
 					"success": {
 						"type": "boolean",
