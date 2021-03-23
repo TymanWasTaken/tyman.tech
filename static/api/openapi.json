@@ -222,10 +222,7 @@
 		"schemas": {
 			"File Upload": {
 				"type": "object",
-				"required": [
-					"success",
-					"url"
-				],
+				"required": ["success", "url"],
 				"properties": {
 					"success": {
 						"type": "boolean",
@@ -241,10 +238,7 @@
 			},
 			"Mod Files": {
 				"type": "object",
-				"required": [
-					"success",
-					"files"
-				],
+				"required": ["success", "files"],
 				"properties": {
 					"success": {
 						"type": "boolean",
@@ -301,10 +295,7 @@
 			},
 			"Error": {
 				"type": "object",
-				"required": [
-					"success",
-					"reason"
-				],
+				"required": ["success", "reason"],
 				"description": "Internal Server Error",
 				"properties": {
 					"success": {
@@ -322,10 +313,7 @@
 			"Unauthorized": {
 				"type": "object",
 				"description": "Unauthorized",
-				"required": [
-					"success",
-					"reason"
-				],
+				"required": ["success", "reason"],
 				"properties": {
 					"success": {
 						"type": "boolean",
@@ -346,10 +334,7 @@
 			},
 			"Images List": {
 				"type": "object",
-				"required": [
-					"success",
-					"files"
-				],
+				"required": ["success", "files"],
 				"properties": {
 					"success": {
 						"type": "boolean",
