@@ -6,13 +6,14 @@
 </head>
 <body>
     <label for="uploadUsers">Users with upload permission:</label>
+	<% const uploadKeys = users.keys.filter(u => u.scopes.includes("upload")) %>
+	<% const adminKeys = users.keys.filter(u => u.scopes.includes("admin")) %>
     <ul id="uploadUsers">
-        <% if (Object.keys(users.upload).length >= 1) { %>
-            <% for (const user of Object.keys(users.upload)) { %>
-            <% const uploads = users.upload %>
+        <% if (uploadKeys.length >= 1) { %>
+            <% for (const user of uploadKeys) { %>
             <li>
                 <div class="item">
-                    <%=user%>: <%=uploads[user]%>
+                    <%=user.username%>: <%=user.key%>
                 </div>
             </li>
             <% } %>
@@ -23,12 +24,11 @@
 
     <label for="adminUsers">Users with admin permission:</label>
     <ul id="adminUsers">
-        <% if (Object.keys(users.admin).length >= 1) { %>
-            <% for (const user of Object.keys(users.admin)) { %>
-                <% const admins = users.admin %>
+        <% if (adminKeys.length >= 1) { %>
+            <% for (const user of adminKeys) { %>
                 <li>
                     <div class="item">
-                        <%=user%>: <%=admins[user]%>
+                        <%=user.username%>: <%=user.key%>
                     </div>
                 </li>
             <% } %>

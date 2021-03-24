@@ -24,12 +24,11 @@ export interface apiResponse {
 }
 
 export interface allowedUsers {
-	upload: {
-		[s: string]: string;
-	};
-	admin: {
-		[s: string]: string;
-	};
+	keys: {
+		username: string;
+		key: string;
+		scopes: ('upload'|'admin')[]
+	}[]
 }
 
 export const _dirname = __dirname.replace(/[\\/]dist/, '');

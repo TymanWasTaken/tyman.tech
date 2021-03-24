@@ -50,7 +50,7 @@ router.post('/login', formParse(), async (req, res) => {
 	const users: allowedUsers = JSON.parse(
 		(await readFile(_dirname + '/allowed-users.json')).toString()
 	);
-	if (users.admin[req.fields.key as string] === (req.fields.user as string)) {
+	if (users.keys.some(u => u.username === req.fields.user && u.key === req.fields.key)) {
 		req.session['admin'] = true;
 		res.redirect(`${req.protocol}://${req.get('host')}/admin`);
 	} else {
