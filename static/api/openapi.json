@@ -3,7 +3,7 @@
 	"info": {
 		"title": "Tyman.tech API",
 		"description": "[/openapi.json](/api/openapi.json)\n\nThe api for the tyman.tech website",
-		"version": "1.0.2"
+		"version": "1.0.3"
 	},
 	"servers": [
 		{
@@ -67,7 +67,7 @@
 		},
 		"/files/images": {
 			"get": {
-				"summary": "Get imgages",
+				"summary": "Get images",
 				"description": "Get a list of images that have been uplaoded",
 				"responses": {
 					"200": {
@@ -187,7 +187,21 @@
 				],
 				"responses": {
 					"200": {
-						"description": "Success"
+						"description": "Success",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"description": "Whether or not the request succeeded or not",
+											"example": true
+										}
+									}
+								}
+							}
+						}
 					},
 					"403": {
 						"description": "Unauthorized",
@@ -195,6 +209,16 @@
 							"application/json; charset=utf-8": {
 								"schema": {
 									"$ref": "#/components/schemas/Unauthorized"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
 								}
 							}
 						}
