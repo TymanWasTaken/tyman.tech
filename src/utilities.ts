@@ -27,8 +27,8 @@ export interface allowedUsers {
 	keys: {
 		username: string;
 		key: string;
-		scopes: ('upload'|'admin')[]
-	}[]
+		scopes: ('upload' | 'admin')[];
+	}[];
 }
 
 export const _dirname = __dirname.replace(/[\\/]dist/, '');
@@ -164,7 +164,13 @@ export const apiKeyLocked = (type: 'upload' | 'admin') => {
 		const users: allowedUsers = JSON.parse(
 			(await readFile(_dirname + '/allowed-users.json')).toString()
 		);
-		if (!users.keys.some(u => u.key === req.headers.authorization && u.scopes.includes(type))) {
+		if (
+			!users.keys.some(
+				u =>
+					u.key === req.headers.authorization &&
+					u.scopes.includes(type)
+			)
+		) {
 			res.status(403).json({
 				success: false,
 				reason: 'Invalid key'

@@ -73,11 +73,11 @@ router.delete(
 			await delFile(_dirname + '/files/' + req.params.filename);
 			res.status(200).json({
 				success: true
-			})
+			});
 		} catch (e) {
 			res.status(500).json({
 				success: false,
-				reason: "Internal Server Error"
+				reason: 'Internal Server Error'
 			});
 			console.log(e.stack);
 		}
