@@ -164,7 +164,7 @@ export const apiKeyLocked = (type: 'upload' | 'admin') => {
 		const users: allowedUsers = JSON.parse(
 			(await readFile(_dirname + '/allowed-users.json')).toString()
 		);
-		if (!users[type][req.headers.authorization]) {
+		if (!users.keys.some(u => u.key === req.headers.authorization && u.scopes.includes(type))) {
 			res.status(403).json({
 				success: false,
 				reason: 'Invalid key'
