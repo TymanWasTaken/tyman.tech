@@ -11,8 +11,14 @@
 			"description": "Main server"
 		},
 		{
-			"url": "http://localhost:8738/api",
-			"description": "Local dev server"
+			"url": "http://localhost:{port}/api",
+			"description": "Local dev server",
+			"variables": {
+				"port": {
+					"default": "8738",
+					"description": "Local test server port"
+				}
+			}
 		}
 	],
 	"tags": [
