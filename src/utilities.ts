@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
 import moment from 'moment';
 import express from 'express';
+import sass from 'sass';
 
 export interface File {
 	size: number;
@@ -223,3 +224,17 @@ export const checkFiles = async (): Promise<void> => {
 // 		return JSON.stringify(await this.setFileContents(data))
 // 	}
 // }
+
+export const renderSCSSPromise = (
+	options: sass.Options
+): Promise<sass.Result> => {
+	return new Promise((resolve, reject) => {
+		sass.render(options, (e, result) => {
+			if (e) {
+				reject(e);
+			} else {
+				resolve(result);
+			}
+		});
+	});
+};

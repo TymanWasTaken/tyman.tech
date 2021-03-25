@@ -2,10 +2,10 @@ import express from 'express';
 import session from 'express-session';
 import { v4 as uuidV4, v5 as uuidV5 } from 'uuid';
 import sass from 'sass';
-import { _dirname, checkFiles, exists } from './utilities';
+import { _dirname, checkFiles, exists, renderSCSSPromise } from './utilities';
 import { dev } from './config';
 import { join, parse } from 'path';
-import { readdirSync, writeFileSync } from 'fs';
+import { readdirSync, writeFileSync, promises as fsPromises } from 'fs';
 import * as routers from './routers';
 import cors from 'cors';
 
@@ -13,28 +13,32 @@ process.on('unhandledRejection', up => {
 	throw up;
 });
 
-// Render all scss
-const scssFileNames = readdirSync(join(__dirname, '..', 'static', 'scss'));
+if (!dev) {
+	// Render all scss if in production
+	const scssFileNames = readdirSync(join(__dirname, '..', 'static', 'scss'));
 
-for (const sccsFileName of scssFileNames) {
-	const rendered = sass.renderSync({
-		file: join(__dirname, '..', 'static', 'scss', sccsFileName),
-		outputStyle: dev ? 'expanded' : 'compressed'
-	});
-	writeFileSync(
-		join(
-			__dirname,
-			'..',
-			'static',
-			'css',
-			parse(sccsFileName).name + '.css'
-		),
-		rendered.css
-	);
+	for (const sccsFileName of scssFileNames) {
+		const rendered = sass.renderSync({
+			file: join(__dirname, '..', 'static', 'scss', sccsFileName),
+			outputStyle: 'compressed'
+		});
+		writeFileSync(
+			join(
+				__dirname,
+				'..',
+				'static',
+				'css',
+				parse(sccsFileName).name + '.css'
+			),
+			rendered.css
+		);
+	}
 }
 
 const app = express();
 const port = 8738;
+let expressSession: express.RequestHandler;
+let cssHandler: express.RequestHandler;
 
 // Set view engine
 app.set('view engine', 'ejs');
@@ -44,36 +48,63 @@ app.disable('x-powered-by');
 if (dev) {
 	// Set settings for dev, no https and no proxy
 	app.set('trust proxy', false);
-	app.use(
-		session({
-			secret: uuidV5(uuidV4(), uuidV4()),
-			genid: () => uuidV5(uuidV4(), uuidV4()),
-			resave: false,
-			saveUninitialized: false,
-			cookie: {
-				secure: false,
-				httpOnly: false
-			}
-		})
-	);
+	expressSession = session({
+		secret: uuidV5(uuidV4(), uuidV4()),
+		genid: () => uuidV5(uuidV4(), uuidV4()),
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			secure: false,
+			httpOnly: false
+		}
+	});
+	cssHandler = async (req, res, next) => {
+		const cssName = parse(req.path).name;
+		const scssFiles = await fsPromises.readdir(
+			join(__dirname, '..', 'static', 'scss')
+		);
+		if (scssFiles.includes(cssName + '.scss')) {
+			const compiled = await renderSCSSPromise({
+				file: join(
+					__dirname,
+					'..',
+					'static',
+					'scss',
+					cssName + '.scss'
+				),
+				outFile: 'expanded'
+			})
+			res.status(200)
+				.type('css')
+				.send(
+					compiled.css
+				);
+		} else {
+			next();
+		}
+	};
 } else {
 	// Set settings for production, https and proxy
 	app.set('trust proxy', true);
-	app.use(
-		session({
-			secret: uuidV5(uuidV4(), uuidV4()),
-			genid: () => uuidV5(uuidV4(), uuidV4()),
-			resave: false,
-			saveUninitialized: false,
-			cookie: {
-				secure: true
-			}
-		})
-	);
+	expressSession = session({
+		secret: uuidV5(uuidV4(), uuidV4()),
+		genid: () => uuidV5(uuidV4(), uuidV4()),
+		resave: false,
+		saveUninitialized: false,
+		cookie: {
+			secure: true
+		}
+	});
 }
 
 // Set up CORS
 app.use(cors());
+
+// Set up express-session
+app.use(expressSession);
+
+// Add (s)css handler if exists
+if (cssHandler) app.use(cssHandler);
 
 // Static dirs
 app.use(express.static(_dirname + '/static'));
