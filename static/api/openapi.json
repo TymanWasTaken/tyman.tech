@@ -2,7 +2,7 @@
 	"openapi": "3.0.1",
 	"info": {
 		"title": "Tyman.tech API",
-		"description": "[/openapi.json](/api/openapi.json)\n\nThe api for the tyman.tech website",
+		"description": "The api for the tyman.tech website",
 		"version": "1.0.3"
 	},
 	"servers": [
