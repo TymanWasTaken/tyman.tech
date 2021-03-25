@@ -12,15 +12,15 @@ import {
 	readDir,
 	stat
 } from '../utilities';
-import swaggerUI from 'swagger-ui-express';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+// import swaggerUI from 'swagger-ui-express';
+// import { readFileSync } from 'fs';
+// import { join } from 'path';
 
-const apiSpec = JSON.parse(
-	readFileSync(
-		join(__dirname, '..', '..', 'static', 'api', 'openapi.json')
-	).toString()
-);
+// const apiSpec = JSON.parse(
+// 	readFileSync(
+// 		join(__dirname, '..', '..', 'static', 'api', 'openapi.json')
+// 	).toString()
+// );
 
 const router = Router();
 
@@ -28,9 +28,13 @@ router.get('/', (req, res) => {
 	res.render('api/index');
 });
 
-router.use('/docs', swaggerUI.serve);
+// router.use('/docs', swaggerUI.serve);
 
-router.get('/docs', swaggerUI.setup(apiSpec));
+// router.get('/docs', swaggerUI.setup(apiSpec));
+
+router.get('/docs', (req, res) => {
+	res.render('api/docs');
+})
 
 router.get('/files/mods', async (req, res) => {
 	try {

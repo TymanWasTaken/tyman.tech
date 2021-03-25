@@ -34,7 +34,6 @@
 		"moment": "^2.29.1",
 		"rate-limiter-flexible": "^2.2.1",
 		"sass": "^1.32.8",
-		"swagger-ui-express": "^4.1.6",
 		"uuid": "^8.3.2"
 	},
 	"devDependencies": {
