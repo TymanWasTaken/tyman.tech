@@ -34,7 +34,7 @@ router.get('/', (req, res) => {
 
 router.get('/docs', (req, res) => {
 	res.render('api/docs');
-})
+});
 
 router.get('/files/mods', async (req, res) => {
 	try {
