@@ -37,6 +37,7 @@
 				"tags": ["Mods"],
 				"summary": "Get mods",
 				"description": "Gets all the availible mod files",
+				"operationId": "getMods",
 				"responses": {
 					"200": {
 						"description": "Success",
@@ -75,6 +76,7 @@
 			"get": {
 				"summary": "Get images",
 				"description": "Get a list of images that have been uplaoded",
+				"operationId": "getImages",
 				"responses": {
 					"200": {
 						"description": "Success",
@@ -118,6 +120,7 @@
 				"tags": ["Images"],
 				"summary": "Upload image",
 				"description": "Upload an image to the site",
+				"operationId": "uploadImage",
 				"requestBody": {
 					"content": {
 						"multipart/form-data": {
@@ -155,6 +158,16 @@
 							}
 						}
 					},
+					"422": {
+						"description": "File not given",
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/File Upload 422"
+								}
+							}
+						}
+					},
 					"502": {
 						"description": "Bad Gateway",
 						"content": {
@@ -178,6 +191,7 @@
 				"tags": ["Images"],
 				"summary": "Delete image",
 				"description": "Delete an image file",
+				"operationId": "deleteImage",
 				"parameters": [
 					{
 						"name": "file",
@@ -252,7 +266,7 @@
 		"schemas": {
 			"File Upload": {
 				"type": "object",
-				"required": ["success", "url"],
+				"required": ["success", "url", "id", "filename"],
 				"properties": {
 					"success": {
 						"type": "boolean",
@@ -262,7 +276,33 @@
 					"url": {
 						"type": "string",
 						"description": "The url of the uploaded image",
-						"example": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+						"example": "https://tyman.tech/394nRWnVRe.png"
+					},
+					"filename": {
+						"type": "string",
+						"description": "The filename on the server",
+						"example": "394nRWnVRe.png"
+					},
+					"id": {
+						"type": "string",
+						"description": "The ID of the file on the server",
+						"example": "394nRWnVRe"
+					}
+				}
+			},
+			"File Upload 422": {
+				"type": "object",
+				"required": ["success", "reason"],
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"description": "Whether or not the request succeeded or not",
+						"example": false
+					},
+					"reason": {
+						"type": "string",
+						"description": "The reason of failure",
+						"example": "File not given"
 					}
 				}
 			},

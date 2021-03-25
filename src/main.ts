@@ -59,7 +59,12 @@ if (dev) {
 		}
 	});
 	cssHandler = async (req, res, next) => {
-		const cssName = parse(req.path).name;
+		const path = parse(req.path);
+		if (path.ext !== '.css' && path.dir !== '/css') {
+			next();
+			return;
+		}
+		const cssName = path.name;
 		const scssFiles = await fsPromises.readdir(
 			join(__dirname, '..', 'static', 'scss')
 		);
@@ -73,12 +78,8 @@ if (dev) {
 					cssName + '.scss'
 				),
 				outFile: 'expanded'
-			})
-			res.status(200)
-				.type('css')
-				.send(
-					compiled.css
-				);
+			});
+			res.status(200).type('css').send(compiled.css);
 		} else {
 			next();
 		}

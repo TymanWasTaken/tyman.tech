@@ -18,11 +18,19 @@ export interface File {
 	toJSON(): Record<string, unknown>;
 }
 
-export interface apiResponse {
-	success: boolean;
-	reason?: string;
-	url?: string;
+export interface apiResponseSuccess {
+	success: true;
+	url: string;
+	filename: string;
+	id: string;
 }
+
+export interface apiResponseFailure {
+	success: false;
+	reason: string;
+}
+
+export type apiResponse = apiResponseSuccess | apiResponseFailure;
 
 export interface allowedUsers {
 	keys: {
@@ -127,7 +135,9 @@ export const handleUpload = async (
 	return {
 		res: {
 			success: true,
-			url: `${req.protocol}://${req.get('host')}/${newName}`
+			url: `${req.protocol}://${req.get('host')}/${newName}`,
+			filename: newName,
+			id: id
 		},
 		code: 200
 	};

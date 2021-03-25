@@ -15,9 +15,42 @@
 	"json.schemas": [
 		{
 			"fileMatch": [
-				"/static/api/openapi.json"
+				"/allowed-users.json"
 			],
-			"url": "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/schemas/v3.0/schema.json"
+			"schema": {
+				"type": "object",
+				"properties": {
+					"keys": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": [
+								"username",
+								"key",
+								"scopes"
+							],
+							"properties": {
+								"username": {
+									"type": "string",
+									"description": "The username of this user"
+								},
+								"key": {
+									"type": "string",
+									"format": "uuid",
+									"description": "The key that this user uses"
+								},
+								"scopes": {
+									"type": "array",
+									"items": {
+										"type": "string",
+										"enum": ["upload", "admin"]
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	]
 }
