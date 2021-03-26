@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Express } from 'express';
 import session from 'express-session';
 import { v4 as uuidV4, v5 as uuidV5 } from 'uuid';
 import sass from 'sass';
@@ -8,6 +8,11 @@ import { join, parse } from 'path';
 import { readdirSync, writeFileSync, promises as fsPromises } from 'fs';
 import * as routers from './routers';
 import cors from 'cors';
+import { Sequelize } from 'sequelize';
+
+interface ExpressApp extends Express {
+	db: Sequelize
+}
 
 process.on('unhandledRejection', up => {
 	throw up;
@@ -35,10 +40,12 @@ if (!dev) {
 	}
 }
 
-const app = express();
+const app = express() as ExpressApp;
 const port = 8738;
 let expressSession: express.RequestHandler;
 let cssHandler: express.RequestHandler;
+
+app.db = new Sequelize('tyman-tech-api', )
 
 // Set view engine
 app.set('view engine', 'ejs');
