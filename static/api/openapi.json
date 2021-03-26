@@ -29,9 +29,126 @@
 		{
 			"name": "Mods",
 			"description": "API Endpoints for minecraft mods"
+		},
+		{
+			"name": "Links",
+			"description": "API Endpoints for linked accounts"
 		}
 	],
 	"paths": {
+		"/links/minecraft/{discordID}": {
+			"get": {
+				"description": "Get a minecraft account from discord ID",
+				"operationId": "getMinecraftFromDiscord",
+				"parameters": [
+					{
+						"name": "discordID",
+						"in": "path",
+						"required": true,
+						"style": "simple",
+						"explode": false,
+						"schema": {
+							"type": "string",
+							"description": "The discord ID of the user to fetch"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"$ref": "#/components/schemas/Discord To Minecraft"
+								}
+							}
+						},
+						"description": "Success"
+					},
+					"400": {
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"required": ["success", "reason"],
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"description": "Whether or not the request succeeded or not",
+											"example": true
+										},
+										"reason": {
+											"type": "string",
+											"description": "The reason of failure",
+											"example": "Link not found"
+										}
+									}
+								}
+							}
+						},
+						"description": "Not found"
+					}
+				},
+				"tags": [
+					"Links"
+				]
+			}
+		},
+		"/links/minecraft": {
+			"post": {
+				"description": "Add a mc and discord account to db (requires admin key because I'm too lazy to add oauth support right now)",
+				"operationId": "setMinecraftAndDiscord",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"required": ["discordID", "minecraftID"],
+								"properties": {
+									"discordID": {
+										"type": "string",
+										"description": "The discord ID of the user",
+										"example": "487443883127472129"
+									},
+									"minecraftID": {
+										"type": "string",
+										"description": "The minecraft UUID of the user",
+										"example": "424ef6d0-4774-4f8c-8bef-8f62ebdac9c0"
+									}
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"API Key": []
+					}
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json; charset=utf-8": {
+								"schema": {
+									"type": "object",
+									"required": ["success"],
+									"properties": {
+										"success": {
+											"type": "boolean",
+											"description": "Whether or not the request succeeded or not",
+											"example": true
+										}
+									}
+								}
+							}
+						},
+						"description": "Success"
+					}
+				},
+				"tags": [
+					"Links"
+				]
+			}
+		},
 		"/files/mods": {
 			"get": {
 				"tags": ["Mods"],
@@ -264,6 +381,27 @@
 	},
 	"components": {
 		"schemas": {
+			"Discord To Minecraft": {
+				"type": "object",
+				"required": ["success", "discordID", "minecraftID"],
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"description": "Whether or not the request succeeded or not",
+						"example": true
+					},
+					"discordID": {
+						"type": "string",
+						"description": "The discord id of the user",
+						"example": "487443883127472129"
+					},
+					"minecraftID": {
+						"type": "string",
+						"description": "The minecraft uuid of the user (with dashes)",
+						"example": "424ef6d0-4774-4f8c-8bef-8f62ebdac9c0"
+					}
+				}
+			},
 			"File Upload": {
 				"type": "object",
 				"required": ["success", "url", "id", "filename"],

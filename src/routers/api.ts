@@ -2,6 +2,7 @@ import { APIMessage } from 'discord-api-types';
 import { Router } from 'express';
 import got from 'got';
 import { botToken } from '../config';
+import { MinecraftAccountLink } from '../models';
 import {
 	delFile,
 	formParse,
@@ -10,7 +11,8 @@ import {
 	handleUpload,
 	apiKeyLocked,
 	readDir,
-	stat
+	stat,
+	jsonParse
 } from '../utilities';
 // import swaggerUI from 'swagger-ui-express';
 // import { readFileSync } from 'fs';
@@ -115,5 +117,40 @@ router.post(
 		res.status(handled.code).json(handled.res);
 	}
 );
+
+router.get(
+	'/links/minecraft/:discordID',
+	async (req, res) => {
+		const entry = await MinecraftAccountLink.findByPk(req.params.discordID)
+		if (!entry) {
+			res.status(404).json({
+				success: false,
+				reason: 'Link not found'
+			})
+		} else {
+			res.status(200).json({
+				success: true,
+				discordID: entry.discordID,
+				minecraftID: entry.minecraftID
+			})
+		}
+	}
+)
+
+router.post(
+	'/links/minecraft',
+	apiKeyLocked('admin'),
+	jsonParse,
+	async (req, res) => {
+		const entry = MinecraftAccountLink.build({
+			minecraftID: req.body.minecraftID,
+			discordID: req.body.discordID
+		})
+		await entry.save();
+		res.json({
+			success: true
+		})
+	}
+)
 
 export const APIRouter = router;

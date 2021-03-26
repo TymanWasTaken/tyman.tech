@@ -6,6 +6,7 @@ import { RateLimiterMemory } from 'rate-limiter-flexible';
 import moment from 'moment';
 import express from 'express';
 import sass from 'sass';
+import { json as bodyParserJSON } from 'body-parser';
 
 export interface File {
 	size: number;
@@ -248,3 +249,5 @@ export const renderSCSSPromise = (
 		});
 	});
 };
+
+export const jsonParse = bodyParserJSON()
