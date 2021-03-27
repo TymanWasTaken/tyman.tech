@@ -250,4 +250,4 @@ export const renderSCSSPromise = (
 	});
 };
 
-export const jsonParse = bodyParserJSON()
+export const jsonParse = bodyParserJSON();

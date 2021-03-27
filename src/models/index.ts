@@ -1,2 +1,2 @@
-export * from './BaseModel'
-export * from './MinecraftAccountLink'
+export * from './BaseModel';
+export * from './LinkAccount';

@@ -5,4 +5,4 @@ export const db = {
 	password: '',
 	host: 'localhost',
 	port: 2331
-}
+};

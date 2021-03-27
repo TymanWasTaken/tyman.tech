@@ -88,9 +88,7 @@
 						"description": "Not found"
 					}
 				},
-				"tags": [
-					"Links"
-				]
+				"tags": ["Links"]
 			}
 		},
 		"/links/minecraft": {
@@ -144,9 +142,7 @@
 						"description": "Success"
 					}
 				},
-				"tags": [
-					"Links"
-				]
+				"tags": ["Links"]
 			}
 		},
 		"/files/mods": {

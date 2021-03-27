@@ -18,20 +18,27 @@ class TymanTech {
 	public express: Express;
 	public port = 8738;
 	public db: Sequelize;
-	public constructor() {		
-		this.express = express();		
-		this.db = new Sequelize('tyman-tech-api', dbConfig.username, dbConfig.password, {
-			host: dbConfig.host,
-			port: dbConfig.port,
-			dialect: 'postgres',
-			logging: false
-		})	
+	public constructor() {
+		this.express = express();
+		this.db = new Sequelize(
+			'tyman-tech-api',
+			dbConfig.username,
+			dbConfig.password,
+			{
+				host: dbConfig.host,
+				port: dbConfig.port,
+				dialect: 'postgres',
+				logging: false
+			}
+		);
 	}
 	public async init(): Promise<void> {
 		if (!dev) {
 			// Render all scss if in production
-			const scssFileNames = await fsPromises.readdir(join(__dirname, '..', 'static', 'scss'));
-		
+			const scssFileNames = await fsPromises.readdir(
+				join(__dirname, '..', 'static', 'scss')
+			);
+
 			for (const sccsFileName of scssFileNames) {
 				const rendered = await renderSCSSPromise({
 					file: join(__dirname, '..', 'static', 'scss', sccsFileName),
@@ -53,7 +60,7 @@ class TymanTech {
 		let cssHandler: express.RequestHandler;
 		// Set view engine
 		this.express.set('view engine', 'ejs');
-		
+
 		// Remove the blatant express.js advertising that is also a vulnerability
 		this.express.disable('x-powered-by');
 		if (dev) {
@@ -114,25 +121,25 @@ class TymanTech {
 
 		// Set up DB
 		await this.dbInit();
-		
+
 		// Set up CORS
 		this.express.use(cors());
-		
+
 		// Set up express-session
 		this.express.use(expressSession);
-		
+
 		// Add (s)css handler if exists
 		if (cssHandler) this.express.use(cssHandler);
-		
+
 		// Static dirs
 		this.express.use(express.static(_dirname + '/static'));
 		this.express.use(express.static(_dirname + '/files'));
-		
+
 		// Routers from ./routers
 		this.express.use('/', routers.IndexRouter);
 		this.express.use('/api', routers.APIRouter);
 		this.express.use('/admin', routers.AdminRouter);
-		
+
 		// Handle static views or 404 last
 		this.express.get('*', async (req, res) => {
 			const path: string = req.path.replace(/^\//, '');
@@ -144,21 +151,26 @@ class TymanTech {
 		});
 	}
 	public async dbInit(): Promise<void> {
-		Models.MinecraftAccountLink.init(
+		Models.LinkAccount.init(
 			{
+				id: {
+					type: DataTypes.STRING,
+					defaultValue: uuidV5(uuidV4(), uuidV4()),
+					primaryKey: true,
+					allowNull: false
+				},
 				discordID: {
 					type: DataTypes.STRING,
-					allowNull: false,
-					primaryKey: true
+					allowNull: true
 				},
 				minecraftID: {
 					type: DataTypes.STRING,
-					allowNull: false
+					allowNull: true
 				}
 			},
-			{sequelize: this.db}
-		)
-		await this.db.sync({alter: true})
+			{ sequelize: this.db }
+		);
+		await this.db.sync({ alter: true });
 	}
 	public start(): void {
 		// start the Express server
@@ -166,11 +178,11 @@ class TymanTech {
 			console.log(`Server started on port ${this.port}`);
 			await checkFiles();
 			setInterval(checkFiles, 60000);
-		});	
+		});
 	}
 }
 
 const app = new TymanTech();
 app.init().then(() => {
 	app.start();
-})
+});
