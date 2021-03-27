@@ -44,7 +44,6 @@ export const _dirname = __dirname.replace(/[\\/]dist/, '');
 export const stat = promisify(fs.stat);
 export const readDir = promisify(fs.readdir);
 export const readFile = promisify(fs.readFile);
-// export const writeFile = promisify(fs.writeFile)
 export const delFile = promisify(fs.unlink);
 export const renameFile = promisify(fs.rename);
 export const exists = promisify(fs.exists);
@@ -207,33 +206,6 @@ export const checkFiles = async (): Promise<void> => {
 		}
 	}
 };
-
-// export class JsonDB {
-// 	public path: string
-// 	constructor(file: string) {
-// 		const path = this.path = _dirname + '/' + file
-// 		if (fs.existsSync(path)) {
-// 			this.path = path
-// 		} else {
-// 			throw new Error('Specified db is not a file!')
-// 		}
-// 	}
-// 	private getFileContents = async () => {
-// 		return (await readFile(this.path)).toString()
-// 	}
-// 	private setFileContents = async (contents: string) => {
-// 		return (await writeFile(this.path, contents))
-// 	}
-// 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// 	public getContent = async (): Promise<Record<string, any>> => {
-// 		return JSON.parse(await this.getFileContents())
-// 	}
-//
-// 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// 	public setContent = async (data: Record<string, any>): Promise<void> => {
-// 		return JSON.stringify(await this.setFileContents(data))
-// 	}
-// }
 
 export const renderSCSSPromise = (
 	options: sass.Options
