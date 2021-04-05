@@ -3,22 +3,15 @@ html {
 	box-sizing: border-box;
 	overflow: -moz-scrollbars-vertical;
 	overflow-y: scroll;
+	background-color: var(--primary-color);
+	color: var(--text-color);
+	font-family: 'Roboto', sans-serif;
 }
 
 *,
 *:before,
 *:after {
 	box-sizing: inherit;
-}
-
-body {
-	margin: 0;
-}
-
-html {
-	background-color: var(--primary-color);
-	color: var(--text-color);
-	font-family: 'Roboto', sans-serif;
 }
 
 body {
