@@ -1,0 +1,13 @@
+# Allow everything except api endpoints, mod files, and admin
+
+User-agent: *
+Disallow: /files
+Disallow: /admin
+Disallow: /admin/*
+Allow: /api/docs
+Allow: /api/redoc
+Allow: /api
+Disallow: /api/*
+Allow: /
+
+# I will maybe make a sitemap later
