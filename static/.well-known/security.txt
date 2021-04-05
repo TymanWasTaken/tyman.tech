@@ -1,0 +1,5 @@
+Contact: mailto:tyman@tyman.tech
+Expires: Fri, 5 Apr 2024 12:00 -0600
+Preferred-Languages: en
+Canonical: https://tyman.tech/.well-known/security.txt
+
