@@ -10,7 +10,8 @@ import {
 	handleUpload,
 	apiKeyLocked,
 	readDir,
-	stat
+	stat,
+	adminLocked
 } from '../utilities';
 
 const router = Router();
@@ -58,7 +59,13 @@ router.get('/files/mods', async (req, res) => {
 
 router.delete(
 	'/files/images/:filename',
-	apiKeyLocked('admin'),
+	(req, res, next) => {
+		if (req.params.ui) {
+			adminLocked(req, res, next)
+		} else {
+			apiKeyLocked('admin')(req, res, next)
+		}
+	},
 	async (req, res) => {
 		try {
 			await delFile(_dirname + '/files/' + req.params.filename);
