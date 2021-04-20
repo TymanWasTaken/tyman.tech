@@ -61,9 +61,9 @@ router.delete(
 	'/files/images/:filename',
 	(req, res, next) => {
 		if (req.params.ui) {
-			adminLocked(req, res, next)
+			adminLocked(req, res, next);
 		} else {
-			apiKeyLocked('admin')(req, res, next)
+			apiKeyLocked('admin')(req, res, next);
 		}
 	},
 	async (req, res) => {

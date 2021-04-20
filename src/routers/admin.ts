@@ -13,7 +13,7 @@ import {
 import { exec } from 'child_process';
 import { promisify } from 'node:util';
 
-const sh = promisify(exec)
+const sh = promisify(exec);
 
 const router = Router();
 
@@ -68,9 +68,11 @@ router.post('/login', formParse(), async (req, res) => {
 });
 
 router.get('/stats', adminLocked, async (req, res) => {
-	const page = await sh("sudo zcat -f /var/log/nginx/tyman-tech.access.log* | sudo goaccess --log-format=COMBINED --geoip-database=/home/tyman/GoAccess/GeoLite2-City.mmdb --output=html").then(out => out.stdout)
-	res.send(page)
-})
+	const page = await sh(
+		'sudo zcat -f /var/log/nginx/tyman-tech.access.log* | sudo goaccess --log-format=COMBINED --geoip-database=/home/tyman/GoAccess/GeoLite2-City.mmdb --output=html'
+	).then(out => out.stdout);
+	res.send(page);
+});
 
 router.get('*', adminLocked, async (req, res) => {
 	const path: string = req.path.replace(/^\//, '');
