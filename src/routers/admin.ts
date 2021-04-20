@@ -69,7 +69,7 @@ router.post('/login', formParse(), async (req, res) => {
 
 router.get('/stats', adminLocked, async (req, res) => {
 	const page = await sh(
-		'sudo zcat -f /var/log/nginx/tyman-tech.access.log* | sudo goaccess --log-format=COMBINED --geoip-database=/home/tyman/GoAccess/GeoLite2-City.mmdb --output=html'
+		'sudo zcat /var/log/nginx/tyman-tech.access* | goaccess - --output=html'
 	).then(out => out.stdout);
 	res.send(page);
 });
