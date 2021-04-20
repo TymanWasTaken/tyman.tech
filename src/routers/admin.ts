@@ -11,7 +11,7 @@ import {
 	_dirname
 } from '../utilities';
 import { exec } from 'child_process';
-import { promisify } from 'node:util';
+import { promisify } from 'util';
 
 const sh = promisify(exec);
 
