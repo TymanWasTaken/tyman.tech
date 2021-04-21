@@ -39,10 +39,10 @@ body {
 		@media (max-width: 550px) {
 			display: none;
 		}
-
 	}
 
-	> a, > div.items > a {
+	> a,
+	> div.items > a {
 		text-align: center;
 		padding: 14px 16px;
 		text-decoration: none;
