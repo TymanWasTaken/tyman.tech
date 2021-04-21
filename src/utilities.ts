@@ -53,48 +53,34 @@ export const formParse = (): express.RequestHandler =>
 		uploadDir: _dirname + '/files',
 		keepExtensions: true
 	});
+
 export const rateLimiterUploader = new RateLimiterMemory({
 	points: 2,
 	duration: 60
 });
 
-export const rateLimiterFiles = new RateLimiterMemory({
-	points: 2,
-	duration: 10
-});
+export const getUsers = async (): Promise<allowedUsers> =>
+	JSON.parse((await readFile(_dirname + '/allowed-users.json')).toString());
 
 export const rateLimitUploader = async (
 	req: express.Request,
 	res: express.Response,
 	next: express.NextFunction
 ): Promise<void> => {
+	const users = req['cache']?.users as allowedUsers;
+	if (
+		users?.keys?.find(
+			e =>
+				e.key === req.headers.authorization &&
+				e.scopes.includes('admin')
+		)
+	) {
+		// Admin bypass ratelimit
+		next();
+		return;
+	}
 	rateLimiterUploader
-		.consume(req.fields.key as string, 1)
-		.then(() => {
-			next();
-		})
-		.catch(rateLimiterRes => {
-			res.set({
-				'Retry-After': rateLimiterRes.msBeforeNext / 1000,
-				'X-RateLimit-Limit': 2,
-				'X-RateLimit-Remaining': rateLimiterRes.remainingPoints,
-				'X-RateLimit-Reset': new Date(
-					Date.now() + rateLimiterRes.msBeforeNext
-				)
-			});
-			res.sendStatus(429);
-			const file = req.files.file as File;
-			delFile(file.path);
-		});
-};
-
-export const rateLimitFiles = async (
-	req: express.Request,
-	res: express.Response,
-	next: express.NextFunction
-): Promise<void> => {
-	rateLimiterFiles
-		.consume(req.sessionID, 1)
+		.consume(req.headers.authorization as string, 1)
 		.then(() => {
 			next();
 		})
@@ -171,9 +157,9 @@ export const apiKeyLocked = (type: 'upload' | 'admin') => {
 		res: express.Response,
 		next: express.NextFunction
 	): Promise<void> => {
-		const users: allowedUsers = JSON.parse(
-			(await readFile(_dirname + '/allowed-users.json')).toString()
-		);
+		const users = await getUsers();
+		if (!req['cache']) req['cache'] = {};
+		req['cache'].users = users;
 		if (
 			!users.keys.some(
 				u =>
@@ -194,7 +180,15 @@ export const apiKeyLocked = (type: 'upload' | 'admin') => {
 export const checkFiles = async (): Promise<void> => {
 	const files: string[] = await readDir(_dirname + '/files');
 	const statFiles = await Promise.all(
-		files.map(f => stat(_dirname + '/files/' + f))
+		files
+			.map(async f => {
+				try {
+					return await stat(_dirname + '/files/' + f);
+				} catch {
+					return null;
+				}
+			})
+			.filter(f => f !== null)
 	);
 	const fileObj = Object.fromEntries(
 		files.map((_, i) => [files[i], statFiles[i]])

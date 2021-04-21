@@ -1,0 +1,22 @@
+@import 'default';
+
+.item > .hoverDiv {
+	display: none;
+}
+.item:hover > .hoverDiv {
+	display: block;
+}
+.hoverDiv {
+	position: fixed;
+	top: 0;
+	right: 0;
+	max-height: 300px;
+	max-width: 500px;
+}
+.hoverImg {
+	max-width: 100%;
+	max-height: 100%;
+	border-style: solid;
+	border-width: thick;
+	border-color: red;
+}

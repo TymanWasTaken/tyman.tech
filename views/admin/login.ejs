@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin login</title>
+	<link rel="stylesheet" href="/css/default.css">
 </head>
 <body>
-<form action="/admin/login" method="post" enctype="multipart/form-data">
-    <label for="user">Enter username:</label>
-    <input type="text" id="user" name="user"><br><br>
-    <label for="key">Enter password:</label>
-    <input type="password" id="key" name="key"><br><br>
-    <input type="submit">
-</form>
+	<%- include('../partials/header') %>
+	<h1>Admin login</h1>
+	<form action="/admin/login" method="post" enctype="multipart/form-data">
+		<label for="user">Enter username:</label>
+		<input type="text" id="user" name="user"><br><br>
+		<label for="key">Enter password:</label>
+		<input type="password" id="key" name="key"><br><br>
+		<input type="submit">
+	</form>
 </body>
 </html>

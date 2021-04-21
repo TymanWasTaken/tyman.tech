@@ -3,9 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin control panel</title>
+	<link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
-<a href="/admin/files">files panel</a>
-<a href="/admin/users">users panel</a>
+	<%- include('../partials/header') %>
+	<h1>Admin control panel</h1>
+	<ul>
+		<li>
+			<a href="/admin/files">Files manager</a>
+		</li>
+		<li>
+			<a href="/admin/users">Users list</a>
+		</li>
+		<li>
+			<a href="/admin/stats">Statistics</a>
+		</li>
+	</ul>
 </body>
 </html>

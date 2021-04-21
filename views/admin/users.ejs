@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>User management</title>
+	<link rel="stylesheet" href="/css/default.css">
 </head>
 <body>
+	<%- include('../partials/header') %>
+	<h1>Users list</h1>
     <label for="uploadUsers">Users with upload permission:</label>
 	<% const uploadKeys = users.keys.filter(u => u.scopes.includes("upload")) %>
 	<% const adminKeys = users.keys.filter(u => u.scopes.includes("admin")) %>

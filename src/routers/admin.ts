@@ -47,7 +47,8 @@ router.get('/users', adminLocked, async (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-	res.render('admin/login');
+	if (req.session['admin']) res.redirect('/admin');
+	else res.render('admin/login');
 });
 
 router.post('/login', formParse(), async (req, res) => {

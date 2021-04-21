@@ -43,6 +43,17 @@ let cssHandler: express.RequestHandler;
 // Set view engine
 app.set('view engine', 'ejs');
 
+// Override default sendStatus
+const defaultSendStatus = app.response.sendStatus;
+const customCodes = [403, 404];
+app.response.sendStatus = function (code: number) {
+	if (customCodes.includes(code)) {
+		return this.status(code).render(`errors/${code}`);
+	} else {
+		return defaultSendStatus.bind(this)(code);
+	}
+};
+
 // Remove the blatant express.js advertising that is also a vulnerability
 app.disable('x-powered-by');
 if (dev) {

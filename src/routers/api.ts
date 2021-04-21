@@ -59,7 +59,7 @@ router.get('/files/mods', async (req, res) => {
 
 router.delete(
 	'/files/images/:filename',
-	(req, res, next) => { 
+	(req, res, next) => {
 		/* 
 			If ui param, use that instead of an api key
 			(so /admin/files delete button works without entering api key again)
