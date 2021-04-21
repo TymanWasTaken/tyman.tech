@@ -32,7 +32,17 @@ body {
 	overflow: hidden;
 	background-color: var(--navbar-color);
 
-	> a {
+	> div.items {
+		float: right;
+		padding-top: 14px;
+
+		@media (max-width: 550px) {
+			display: none;
+		}
+
+	}
+
+	> a, > div.items > a {
 		text-align: center;
 		padding: 14px 16px;
 		text-decoration: none;
@@ -43,12 +53,8 @@ body {
 			color: var(--text-color);
 		}
 
-		&.item {
-			float: right;
-
-			&:hover {
-				background-color: var(--navbar-hover-color);
-			}
+		&:hover {
+			background-color: var(--navbar-hover-color);
 		}
 
 		&.title {
