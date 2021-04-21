@@ -59,8 +59,12 @@ router.get('/files/mods', async (req, res) => {
 
 router.delete(
 	'/files/images/:filename',
-	(req, res, next) => {
-		if (req.params.ui) {
+	(req, res, next) => { 
+		/* 
+			If ui param, use that instead of an api key
+			(so /admin/files delete button works without entering api key again)
+		*/
+		if (req.query.ui) {
 			adminLocked(req, res, next);
 		} else {
 			apiKeyLocked('admin')(req, res, next);

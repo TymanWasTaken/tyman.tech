@@ -7,10 +7,12 @@
 		async function delFile(file) {
             let url = window.location.href.split('/')
             url = `${url[0]}//${url[2]}/api/files/images/${file}?ui=true`
-			await fetch(url, {
+			const req = await fetch(url, {
 				method: 'DELETE'
 			})
-			location.reload()
+			const res = await req.json()
+			if (!res.success) alert("Failed to delete file")
+			else location.reload()
 		}
 		function onMouseOver(id) {
 			const div = document.getElementById(id)
