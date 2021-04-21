@@ -6,7 +6,7 @@
     <script>
 		async function delFile(file) {
             let url = window.location.href.split('/')
-            url = url[0] + '//' + url[2] + '/api/files/images/' + file
+            url = `${url[0]}//${url[2]}/api/files/images/${file}?ui=true`
 			await fetch(url, {
 				method: 'DELETE'
 			})
