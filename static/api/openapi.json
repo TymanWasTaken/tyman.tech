@@ -357,6 +357,11 @@
 									"type": "string",
 									"description": "The url containing the file",
 									"example": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+								},
+								"changelog": {
+									"type": "string",
+									"description": "The changelog of this version of the mod",
+									"example": "https://hst.sh/mazazikubu.txt"
 								}
 							}
 						}

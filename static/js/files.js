@@ -46,6 +46,15 @@ $('document').ready(async () => {
 					file['needs-whitelist'] ? ' (NEEDS WHITELIST)' : ''
 				}`
 			);
+			if (file.changelog) {
+				const $a = $('<a></a>');
+				$a.attr('href', file.changelog);
+				$a.attr('target', '_blank');
+				$a.attr('rel', 'noreferrer noopener');
+				$a.append('Changelog');
+				$div.append(' ');
+				$div.append($a);
+			}
 			const $a = $('<a></a>');
 			$a.attr('href', file.url);
 			$a.append($div);

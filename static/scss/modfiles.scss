@@ -53,6 +53,14 @@ div#files {
 	display: none;
 }
 
+a {
+	color: blue;
+
+	&:visited {
+		color: blue;
+	}
+}
+
 * {
 	&::-webkit-scrollbar {
 		width: 10px;
