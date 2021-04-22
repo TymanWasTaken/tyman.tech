@@ -1,0 +1,17 @@
+:root {
+	--primary-color: white;
+	--text-color: black;
+	--secondary-color: #c2c2c2;
+	--navbar-hover-color: #ddd;
+	--navbar-color: #cccccc;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--primary-color: #232323;
+		--text-color: white;
+		--secondary-color: #171717;
+		--navbar-hover-color: rgb(34, 34, 34);
+		--navbar-color: #333;
+	}
+}

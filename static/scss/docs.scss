@@ -1,9 +1,14 @@
-@import 'default';
+@import 'variables';
+@import 'header';
 
 html {
 	box-sizing: border-box;
 	overflow: -moz-scrollbars-vertical;
 	overflow-y: scroll;
+}
+
+body {
+	margin: 0;
 }
 
 *,
