@@ -29,7 +29,7 @@
 		"express": "^4.17.1",
 		"express-formidable": "^1.2.0",
 		"express-session": "^1.17.1",
-		"glob": "^7.1.6",
+		"glob": "^7.1.7",
 		"got": "^11.8.2",
 		"moment": "^2.29.1",
 		"rate-limiter-flexible": "^2.2.1",
