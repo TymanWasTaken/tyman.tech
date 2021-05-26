@@ -39,7 +39,7 @@
 	"devDependencies": {
 		"@types/cors": "^2.8.10",
 		"@types/ejs": "^3.0.5",
-		"@types/express": "^4.17.11",
+		"@types/express": "^4.17.12",
 		"@types/express-formidable": "^1.0.4",
 		"@types/express-session": "^1.17.3",
 		"@types/node": "^15.6.0",
