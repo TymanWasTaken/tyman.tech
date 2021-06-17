@@ -94,7 +94,7 @@ export const rateLimitUploader = async (
 				)
 			});
 			res.sendStatus(429);
-			const file = (req.files.file as unknown) as File;
+			const file = req.files.file as unknown as File;
 			delFile(file.path);
 		});
 };
@@ -102,7 +102,7 @@ export const rateLimitUploader = async (
 export const handleUpload = async (
 	req: express.Request
 ): Promise<{ res: apiResponse; code: number }> => {
-	const file = (req.files.file as unknown) as File;
+	const file = req.files.file as unknown as File;
 	if (!file) {
 		await delFile(file.path);
 		return {
