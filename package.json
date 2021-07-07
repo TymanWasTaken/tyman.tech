@@ -37,7 +37,7 @@
 		"uuid": "^8.3.2"
 	},
 	"devDependencies": {
-		"@types/cors": "^2.8.10",
+		"@types/cors": "^2.8.11",
 		"@types/ejs": "^3.0.5",
 		"@types/express": "^4.17.11",
 		"@types/express-formidable": "^1.0.4",
