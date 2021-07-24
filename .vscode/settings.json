@@ -1,56 +1,66 @@
 {
-	"files.exclude": {
-		"**/.git": true,
-		"**/.svn": true,
-		"**/.hg": true,
-		"**/CVS": true,
-		"**/.DS_Store": true,
-		".eslintcache": true,
-		"node_modules": true,
-		"dist": true,
-		"files": true,
-		".idea": true
-	},
-	"typescript.tsdk": "node_modules\\typescript\\lib",
-	"json.schemas": [
-		{
-			"fileMatch": [
-				"/allowed-users.json"
-			],
-			"schema": {
-				"type": "object",
-				"properties": {
-					"keys": {
-						"type": "array",
-						"items": {
-							"type": "object",
-							"required": [
-								"username",
-								"key",
-								"scopes"
-							],
-							"properties": {
-								"username": {
-									"type": "string",
-									"description": "The username of this user"
-								},
-								"key": {
-									"type": "string",
-									"format": "uuid",
-									"description": "The key that this user uses"
-								},
-								"scopes": {
-									"type": "array",
-									"items": {
-										"type": "string",
-										"enum": ["upload", "admin"]
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	]
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    ".eslintcache": true,
+    "node_modules": true,
+    "dist": true,
+    "files": true,
+    ".idea": true
+  },
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "/allowed-users.json"
+      ],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "keys": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "username",
+                "key",
+                "scopes"
+              ],
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "description": "The username of this user"
+                },
+                "key": {
+                  "type": "string",
+                  "format": "uuid",
+                  "description": "The key that this user uses"
+                },
+                "scopes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "upload",
+                      "admin"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "eslint.nodePath": ".yarn/sdks",
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }
