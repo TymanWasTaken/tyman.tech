@@ -70,7 +70,7 @@ router.post('/login', formParse(), async (req, res) => {
 
 router.get('/stats', adminLocked, async (req, res) => {
 	const page = await sh(
-		'zcat ~/.nginx/logs/tyman-tech.access.log* -f | goaccess - --output=html'
+		'zcat ~/.nginx/logs/tyman-tech.access.log* -f | goaccess - --log-format=COMBINED --output=html'
 	).then(out => out.stdout);
 	res.send(page);
 });
