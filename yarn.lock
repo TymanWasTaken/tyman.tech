@@ -104,9 +104,9 @@
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/@types/ejs/-/ejs-3.0.7.tgz#4f2af032f65c54e2bc0b32abce0125af7923b143"
 
-"@types/express-formidable@^1.0.4":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@types/express-formidable/-/express-formidable-1.0.5.tgz#af70c63dac62f2c1577a600c14fcf38647b125a2"
+"@types/express-formidable@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@types/express-formidable/-/express-formidable-1.2.0.tgz#53e59618a07118e48597d4d8345c49d9769e8d6f"
   dependencies:
     "@types/express" "*"
     "@types/formidable" "*"
@@ -1257,7 +1257,7 @@ prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
 
-prettier@2.3.2:
+prettier@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.2.tgz#ef280a05ec253712e486233db5c6f23441e7342d"
 
