@@ -33,7 +33,7 @@
 		"got": "^11.8.2",
 		"moment": "^2.29.1",
 		"rate-limiter-flexible": "^2.2.2",
-		"sass": "^1.32.11",
+		"sass": "^1.38.2",
 		"uuid": "^8.3.2"
 	},
 	"devDependencies": {
